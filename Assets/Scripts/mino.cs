@@ -12,11 +12,11 @@ public class mino : MonoBehaviour
     // mino‰ñ“]
     public Vector3 rotationPoint;
 
-    private static Transform[,] grid = new Transform[6, 12];
     
     void Update()
     {
         MinoMovememt();
+
     }
 
     private void MinoMovememt()
@@ -50,12 +50,20 @@ public class mino : MonoBehaviour
             if (!ValidMovement())
             {
                 transform.position -= new Vector3(0, -1, 0);
-                AddToGrid();
                 this.enabled = false;
                 FindObjectOfType<Spawn>().NewMino();
+
+                if (transform.position.y == 1.5f)
+                {
+                    gameObject.transform.DetachChildren();
+                    Destroy(gameObject);
+                }
+
             }
 
             previousTime = Time.time;
+
+            
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
@@ -86,28 +94,10 @@ public class mino : MonoBehaviour
                 return false;
             }
 
-            int roundX2 = (int)roundX;
-            int roundY2 = (int)roundY;
-            if (grid[roundX2, roundY2] != null)
-            {
-                return false;
-            }
-
         }
         return true;
     }
 
-    void AddToGrid()
-    {
-
-       foreach (Transform children in transform)
-       {
-            int roundX = Mathf.RoundToInt(children.transform.position.x);
-            int roundY = Mathf.RoundToInt(children.transform.position.y);
-
-            grid[roundX, roundY] = children;
-       }
-
-    }
+    
 
 }
