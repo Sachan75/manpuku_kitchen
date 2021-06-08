@@ -12,7 +12,27 @@ public class mino : MonoBehaviour
     // mino回転
     public Vector3 rotationPoint;
 
-    
+    private void Start()
+    {
+        GameObject[] puyos;    //定義は配列で！
+                               //以下はStartメソッド中
+        this.puyos = GameObject.FindGameObjectsWithTag("puyo");  //フィールド中の全ぷよ抽出
+
+        float[] puyox = new float[100];
+        float[] puyoy = new float[100];
+        //以下をStartメソッド中に
+        i = 0;
+        foreach (GameObject puyo in this.puyos)
+        {
+            //丸め誤差解消
+            this.puyox[i] = Mathf.RoundToInt(puyo.transform.position.x * 10.0f) / 10.0f;
+            this.puyoy[i] = Mathf.RoundToInt(puyo.transform.position.y * 10.0f) / 10.0f;
+            i++;
+        }
+
+    }
+
+
     void Update()
     {
         MinoMovememt();
@@ -89,7 +109,7 @@ public class mino : MonoBehaviour
             double roundY = Mathf.RoundToInt(children.transform.position.y);
 
             // minoがステージよりはみ出さないように制御
-            if (roundX < 1.0 || roundX >6.5  || roundY < 1.0)
+            if (roundX <= 4.0 || roundX >=11.0  || roundY <= 1.0)
             {
                 return false;
             }

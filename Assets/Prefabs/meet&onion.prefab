@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6184360731373796124}
   m_Layer: 0
   m_Name: meet&onion
-  m_TagString: Untagged
+  m_TagString: puyo
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
