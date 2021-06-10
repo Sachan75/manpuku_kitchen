@@ -12,7 +12,29 @@ public class mino : MonoBehaviour
     // mino回転
     public Vector3 rotationPoint;
 
-  
+    public GameObject[] puyos;
+
+    float[] puyox = new float[100];
+    float[] puyoy = new float[100];
+
+    private void Start()
+    {
+        this.puyos = GameObject.FindGameObjectsWithTag("puyo");
+
+
+        int i = 0;
+        foreach (GameObject puyo in this.puyos)
+        {
+            //丸め誤差解消
+            this.puyox[i] = Mathf.RoundToInt(puyo.transform.position.x * 10.0f) / 10.0f;
+            this.puyoy[i] = Mathf.RoundToInt(puyo.transform.position.y * 10.0f) / 10.0f;
+            i++;
+
+
+        }
+    }
+
+
 
     void Update()
     {
@@ -47,7 +69,11 @@ public class mino : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.DownArrow) || Time.time - previousTime >= fallTime)
         {
             transform.position += new Vector3(0, -1, 0);
+
             
+
+            
+
             if (!ValidMovement())
             {
                 transform.position -= new Vector3(0, -1, 0);
@@ -95,6 +121,21 @@ public class mino : MonoBehaviour
                 return false;
             }
 
+        }
+
+        int i = 0;
+        foreach (GameObject puyo in this.puyos)
+        {
+            double roundX = Mathf.RoundToInt(transform.position.x * 10.0f) / 10.0f;
+            double roundY = Mathf.RoundToInt(transform.position.y * 10.0f) / 10.0f;
+            //落下終了条件
+            if (roundX == this.puyox[i] && roundY == this.puyoy[i] + 1.0f)
+            {
+                gameObject.transform.DetachChildren();    //親子関係の解除
+                Destroy(gameObject);     //ぷよセットオブジェクト（親）を削除
+                return false;
+            }
+            i++;
         }
         return true;
     }
