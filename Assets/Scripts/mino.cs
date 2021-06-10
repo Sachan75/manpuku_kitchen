@@ -6,32 +6,13 @@ public class mino : MonoBehaviour
 {
 
     public float previousTime;
-    // mino‚Ì—‚¿‚éŠÔ
+    // minoã®è½ã¡ã‚‹æ™‚é–“
     public float fallTime = 1f;
 
-    // mino‰ñ“]
+    // minoå›è»¢
     public Vector3 rotationPoint;
 
-    private void Start()
-    {
-        GameObject[] puyos;    //’è‹`‚Í”z—ñ‚ÅI
-                               //ˆÈ‰º‚ÍStartƒƒ\ƒbƒh’†
-        this.puyos = GameObject.FindGameObjectsWithTag("puyo");  //ƒtƒB[ƒ‹ƒh’†‚Ì‘S‚Õ‚æ’Šo
-
-        float[] puyox = new float[100];
-        float[] puyoy = new float[100];
-        //ˆÈ‰º‚ğStartƒƒ\ƒbƒh’†‚É
-        i = 0;
-        foreach (GameObject puyo in this.puyos)
-        {
-            //ŠÛ‚ßŒë·‰ğÁ
-            this.puyox[i] = Mathf.RoundToInt(puyo.transform.position.x * 10.0f) / 10.0f;
-            this.puyoy[i] = Mathf.RoundToInt(puyo.transform.position.y * 10.0f) / 10.0f;
-            i++;
-        }
-
-    }
-
+  
 
     void Update()
     {
@@ -41,7 +22,7 @@ public class mino : MonoBehaviour
 
     private void MinoMovememt()
     {
-        // ¶–îˆóƒL[‚Å¶‚É“®‚­
+        // å·¦çŸ¢å°ã‚­ãƒ¼ã§å·¦ã«å‹•ã
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             transform.position += new Vector3(-1, 0, 0);
@@ -52,7 +33,7 @@ public class mino : MonoBehaviour
             }
 
         }
-        // ‰E–îˆóƒL[‚Å‰E‚É“®‚­
+        // å³çŸ¢å°ã‚­ãƒ¼ã§å³ã«å‹•ã
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             transform.position += new Vector3(1, 0, 0);
@@ -62,7 +43,7 @@ public class mino : MonoBehaviour
                 transform.position -= new Vector3(1, 0, 0);
             }
         }
-        // ©“®‚Å‰º‚ÉˆÚ“®‚³‚¹‚Â‚ÂA‰º–îˆóƒL[‚Å‚àˆÚ“®‚·‚é
+        // è‡ªå‹•ã§ä¸‹ã«ç§»å‹•ã•ã›ã¤ã¤ã€ä¸‹çŸ¢å°ã‚­ãƒ¼ã§ã‚‚ç§»å‹•ã™ã‚‹
         else if (Input.GetKeyDown(KeyCode.DownArrow) || Time.time - previousTime >= fallTime)
         {
             transform.position += new Vector3(0, -1, 0);
@@ -87,7 +68,7 @@ public class mino : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            // ƒuƒƒbƒN‚Ì‰ñ“]
+            // ãƒ–ãƒ­ãƒƒã‚¯ã®å›è»¢
             transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), 90);
 
             if (!ValidMovement())
@@ -99,7 +80,7 @@ public class mino : MonoBehaviour
         }
     }
 
-    // mino‚ÌˆÚ“®”ÍˆÍ‚Ì§Œä
+    // minoã®ç§»å‹•ç¯„å›²ã®åˆ¶å¾¡
     bool ValidMovement()
     {
 
@@ -108,7 +89,7 @@ public class mino : MonoBehaviour
             double roundX = Mathf.RoundToInt(children.transform.position.x);
             double roundY = Mathf.RoundToInt(children.transform.position.y);
 
-            // mino‚ªƒXƒe[ƒW‚æ‚è‚Í‚İo‚³‚È‚¢‚æ‚¤‚É§Œä
+            // minoãŒã‚¹ãƒ†ãƒ¼ã‚¸ã‚ˆã‚Šã¯ã¿å‡ºã•ãªã„ã‚ˆã†ã«åˆ¶å¾¡
             if (roundX <= 4.0 || roundX >=11.0  || roundY <= 1.0)
             {
                 return false;
