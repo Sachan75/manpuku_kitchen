@@ -25,17 +25,20 @@ public class before : MonoBehaviour
 
     private void MinoMovememt()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (transform.root.gameObject != gameObject)
         {
-            // ブロックの回転
-            transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), -90);
-
-            if (!ValidMovement())
+            if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), +90);
+                // ブロックの回転
+                transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), -90);
+
+                if (!ValidMovement())
+                {
+                    transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), +90);
+                }
+
+
             }
-
-
         }
     }
 
