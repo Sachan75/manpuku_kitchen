@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class mino : MonoBehaviour
+public class set : MonoBehaviour
 {
 
     public float previousTime;
