@@ -1,8 +1,11 @@
-public enum Ingredients
+namespace manpuku_kitchen.Utils
 {
-    CARROT,
-    EGG,
-    MEET,
-    ONION,
-    POTATO,
+    public enum Ingredients
+    {
+        CARROT,
+        EGG,
+        MEET,
+        ONION,
+        POTATO,
+    }
 }

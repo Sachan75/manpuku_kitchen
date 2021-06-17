@@ -1,11 +1,15 @@
-public enum Dish
+
+namespace manpuku_kitchen.Utils
 {
-    CURRY,
-    EGG,
-    FRIED_POTATO,
-    GRATIN,
-    HUMBERG,
-    OMULET,
-    STEW,
-    TONKATSU,
+    public enum Dish
+    {
+        CURRY,
+        EGG,
+        FRIED_POTATO,
+        GRATIN,
+        HUMBERG,
+        OMULET,
+        STEW,
+        TONKATSU,
+    }
 }
