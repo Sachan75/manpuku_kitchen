@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class set : MonoBehaviour
+public class Set : MonoBehaviour
 {
 
     public float previousTime;
@@ -11,6 +11,8 @@ public class set : MonoBehaviour
 
     // mino回転
     public Vector3 rotationPoint;
+    public int rotationFlg = 0; //1の時ぷよ（単体）の回転をしないようにする
+    public int rotationCond = 0;//0:初期状態,1:1回転,2:2回転,3:3回転
 
     public GameObject[] puyos;
 
@@ -70,10 +72,6 @@ public class set : MonoBehaviour
         {
             transform.position += new Vector3(0, -1, 0);
 
-            
-
-            
-
             if (!ValidMovement())
             {
                 transform.position -= new Vector3(0, -1, 0);
@@ -94,12 +92,20 @@ public class set : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
+            rotationFlg = 0;
             // ブロックの回転
             transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), 90);
+            rotationCond += 1;
 
             if (!ValidMovement())
             {
+                rotationFlg = 1;
+                rotationCond -= 1;
                 transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), -90);
+            }
+            if(rotationCond == 4)
+            {
+                rotationCond = 0;
             }
 
 
@@ -107,7 +113,7 @@ public class set : MonoBehaviour
     }
 
     // minoの移動範囲の制御
-    bool ValidMovement()
+    public bool ValidMovement()
     {
 
         foreach (Transform children in transform)
@@ -126,14 +132,48 @@ public class set : MonoBehaviour
         int i = 0;
         foreach (GameObject puyo in this.puyos)
         {
+
             double roundX = Mathf.RoundToInt(transform.position.x * 10.0f) / 10.0f;
             double roundY = Mathf.RoundToInt(transform.position.y * 10.0f) / 10.0f;
-            //落下終了条件
-            if (roundX == this.puyox[i] && roundY == this.puyoy[i] + 1.0f)
+            if (rotationCond == 0) 
             {
-                gameObject.transform.DetachChildren();    //親子関係の解除
-                Destroy(gameObject);     //ぷよセットオブジェクト（親）を削除
-                return false;
+                //落下終了条件
+                if (roundX == this.puyox[i] && roundY == this.puyoy[i] + 1.0f)
+                {
+                    gameObject.transform.DetachChildren();    //親子関係の解除
+                    Destroy(gameObject);     //ぷよセットオブジェクト（親）を削除
+                    return false;
+                }
+            }
+            else if (rotationCond == 1)
+            {
+                //落下終了条件
+                if (roundX == this.puyox[i] && roundY == this.puyoy[i] + 1.0f || roundX == this.puyox[i] +1.0f&& roundY == this.puyoy[i] + 1.0f)
+                {
+                    gameObject.transform.DetachChildren();    //親子関係の解除
+                    Destroy(gameObject);     //ぷよセットオブジェクト（親）を削除
+                    return false;
+                }
+            }
+            else if (rotationCond == 2)
+            {
+                //落下終了条件
+                if (roundX == this.puyox[i] && roundY == this.puyoy[i] + 2.0f )
+                {
+                    gameObject.transform.DetachChildren();    //親子関係の解除
+                    Destroy(gameObject);     //ぷよセットオブジェクト（親）を削除
+                    return false;
+                }
+            }
+            else if (rotationCond == 3)
+            {
+                //落下終了条件
+                if (roundX == this.puyox[i] && roundY == this.puyoy[i] + 1.0f || roundX == this.puyox[i] - 1.0f && roundY == this.puyoy[i] + 1.0f)
+                {
+                    gameObject.transform.DetachChildren();    //親子関係の解除
+                    Destroy(gameObject);     //ぷよセットオブジェクト（親）を削除
+                    return false;
+                }
             }
             i++;
         }

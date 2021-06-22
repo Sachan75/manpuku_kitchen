@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class puyo : MonoBehaviour
+public class Puyo : MonoBehaviour
 {
     GameObject[] puyos;
     GameObject Director;
@@ -17,6 +17,13 @@ public class puyo : MonoBehaviour
 
     private void Start()
     {
+        
+    }
+
+
+
+    void Update()
+    {
         int i = 0;
         this.Director = GameObject.Find("Director");
         this.puyos = GameObject.FindGameObjectsWithTag("puyo");
@@ -27,15 +34,10 @@ public class puyo : MonoBehaviour
             this.puyoy[i] = Mathf.RoundToInt(puyo.transform.position.y * 10.0f) / 10.0f;
             i++;
         }
-    }
 
-
-
-    void Update()
-    {
         MinoMovememt();
 
-        int i = 0;
+        i = 0;
         //丸め誤差解消（自分の今の位置）
         double nowx = Mathf.RoundToInt(transform.position.x * 10.0f) / 10.0f;
         double nowy = Mathf.RoundToInt(transform.position.y * 10.0f) / 10.0f;
@@ -71,12 +73,13 @@ public class puyo : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                // ブロックの回転
+                // ぷよの回転
                 transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), -90);
 
-                if (!ValidMovement())
+                if (Object.FindObjectOfType<Set>().rotationFlg == 1)
                 {
                     transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), +90);
+                    
                 }
 
 
@@ -102,20 +105,6 @@ public class puyo : MonoBehaviour
 
         }
 
-        int i = 0;
-        foreach (GameObject puyo in this.puyos)
-        {
-            double roundX = Mathf.RoundToInt(transform.position.x * 10.0f) / 10.0f;
-            double roundY = Mathf.RoundToInt(transform.position.y * 10.0f) / 10.0f;
-            //落下終了条件
-            if (roundX == this.puyox[i] && roundY == this.puyoy[i] + 1.0f)
-            {
-                gameObject.transform.DetachChildren();    //親子関係の解除
-                Destroy(gameObject);     //ぷよセットオブジェクト（親）を削除
-                return false;
-            }
-            i++;
-        }
         return true;
     }
 
