@@ -6,7 +6,7 @@ public class Puyo : MonoBehaviour
 {
     GameObject[] puyos;
     GameObject Director;
-    int num = 0;    //num=0で落下し、終了時にfallcheckへ、num=1なら休止
+    public int num = 0;    //num=0で落下し、終了時にfallcheckへ、num=1なら休止
     float[] puyox = new float[100];
     float[] puyoy = new float[100];
 

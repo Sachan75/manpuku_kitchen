@@ -8,6 +8,7 @@ public class Set : MonoBehaviour
     public float previousTime;
     // minoの落ちる時間
     public float fallTime = 1f;
+    public int fallCompFlg = 0;
 
     // mino回転
     public Vector3 rotationPoint;
@@ -75,13 +76,25 @@ public class Set : MonoBehaviour
             if (!ValidMovement())
             {
                 transform.position -= new Vector3(0, -1, 0);
+                fallCompFlg = 1;
                 this.enabled = false;
                 FindObjectOfType<Spawn>().NewMino();
 
-                if (transform.position.y == 1.5f)
+                if (rotationCond != 2)
                 {
-                    gameObject.transform.DetachChildren();
-                    Destroy(gameObject);
+                    if (transform.position.y == 1.5f)
+                    {
+                        gameObject.transform.DetachChildren();
+                        Destroy(gameObject);
+                    }
+                }
+                else if(rotationCond == 2)
+                {
+                    if (transform.position.y == 2.5f)
+                    {
+                        gameObject.transform.DetachChildren();
+                        Destroy(gameObject);
+                    }
                 }
 
             }
