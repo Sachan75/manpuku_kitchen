@@ -317,7 +317,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &254161825
 RectTransform:
   m_ObjectHideFlags: 0
@@ -578,7 +578,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &784759750
 RectTransform:
   m_ObjectHideFlags: 0
@@ -803,6 +803,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dishObj: {fileID: 1381896661}
+  ingredientsObj1: {fileID: 1707361227}
+  ingredientsObj2: {fileID: 1763287579}
+  ingredientsObj3: {fileID: 254161824}
+  ingredientsObj4: {fileID: 784759749}
 --- !u!1 &1117731136
 GameObject:
   m_ObjectHideFlags: 0
@@ -1183,7 +1187,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1707361228
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1258,7 +1262,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1763287580
 RectTransform:
   m_ObjectHideFlags: 0

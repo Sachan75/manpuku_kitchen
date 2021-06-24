@@ -4,7 +4,7 @@ namespace manpuku_kitchen.Utils
     public enum Dish
     {
         CURRY,
-        EGG,
+        BOILED_EGG,
         FRIED_POTATO,
         GRATIN,
         HUMBERG,
