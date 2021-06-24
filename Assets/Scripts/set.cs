@@ -8,6 +8,7 @@ public class Set : MonoBehaviour
     public float previousTime;
     // minoの落ちる時間
     public float fallTime = 1f;
+    //落下完了フラグ
     public int fallCompFlg = 0;
 
     // mino回転
@@ -78,7 +79,6 @@ public class Set : MonoBehaviour
                 transform.position -= new Vector3(0, -1, 0);
                 fallCompFlg = 1;
                 this.enabled = false;
-                FindObjectOfType<Spawn>().NewMino();
 
                 if (rotationCond != 2)
                 {
@@ -96,6 +96,10 @@ public class Set : MonoBehaviour
                         Destroy(gameObject);
                     }
                 }
+
+                FindObjectOfType<Delete>().init();
+                FindObjectOfType<Delete>().puyoDestroy();
+                FindObjectOfType<Spawn>().NewMino();
 
             }
 
