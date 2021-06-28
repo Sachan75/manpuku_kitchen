@@ -7,5 +7,6 @@ namespace manpuku_kitchen.Utils
         MEET,
         ONION,
         POTATO,
+        NONE,
     }
 }

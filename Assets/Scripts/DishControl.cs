@@ -45,6 +45,61 @@ public class DishControl : MonoBehaviour
         InitIngredientsImage();
 
         // 初回のお題を決定
+        ResetDishTheme();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (GManager.instance.HasIngredients(dispIngredientsMap[1]))
+        {
+            maruObj1.SetActive(true);
+            ingredientsImage1.color = Color.gray;
+        }
+        if (GManager.instance.HasIngredients(dispIngredientsMap[2]))
+        {
+            maruObj2.SetActive(true);
+            ingredientsImage2.color = Color.gray;
+        }
+        if (GManager.instance.HasIngredients(dispIngredientsMap[3]))
+        {
+            maruObj3.SetActive(true);
+            ingredientsImage3.color = Color.gray;
+        }
+        if (GManager.instance.HasIngredients(dispIngredientsMap[4]))
+        {
+            maruObj4.SetActive(true);
+            ingredientsImage4.color = Color.gray;
+        }
+
+        // すべての素材が揃って料理完成！
+        if (checkIngredients(1) && checkIngredients(2) && checkIngredients(3) && checkIngredients(4))
+        {
+            // TODO 料理ができたアニメーションとか？
+
+            // 次のお題を表示
+            ResetDishTheme();
+        }
+    }
+
+    /// <summary>
+    /// 素材が集まっているかチェックする.
+    /// Ingredients.NONE（素材なし）の場合も true を返す.
+    /// </summary>
+    /// <param name="i">表示されている素材の番号（１～４）</param>
+    /// <returns>true : 素材が集まっている / false : 集まっていない</returns>
+    private bool checkIngredients(int i)
+    {
+        return GManager.instance.HasIngredients(dispIngredientsMap[i]) ||
+            dispIngredientsMap[i] == Ingredients.NONE;
+    }
+
+    private void ResetDishTheme()
+    {
+        // クリア
+        ClearDishTheme();
+
+        // お題を決定
         dishTheme = LoadDishTheme();
 
         // お題の画像を表示
@@ -59,13 +114,26 @@ public class DishControl : MonoBehaviour
         ingredientsObj4.SetActive(true);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void ClearDishTheme()
     {
-        if (GManager.instance.HasIngredients(Ingredients.CARROT))
-        {
-            maruObj1.
-        }
+        // お題（料理）のクリア
+        dishObj.SetActive(true);
+        // 素材のクリア
+        ingredientsObj1.SetActive(false);
+        ingredientsObj2.SetActive(false);
+        ingredientsObj3.SetActive(false);
+        ingredientsObj4.SetActive(false);
+        ingredientsImage1.color = Color.white;
+        ingredientsImage2.color = Color.white;
+        ingredientsImage3.color = Color.white;
+        ingredientsImage4.color = Color.white;
+        // 素材チェックのクリア
+        maruObj1.SetActive(false);
+        maruObj2.SetActive(false);
+        maruObj3.SetActive(false);
+        maruObj4.SetActive(false);
+        // GManager側もリセット
+        GManager.instance.ResetIngredients();
     }
 
     /// <summary>
@@ -146,6 +214,9 @@ public class DishControl : MonoBehaviour
 
     private void LoadIngredientsSprite()
     {
+        // 素材のゲームオブジェクト１～４にどの素材があてられてるかをリセット
+        ResetDispIngredientsMap();
+
         switch (dishTheme)
         {
             case Dish.CURRY:
@@ -153,55 +224,112 @@ public class DishControl : MonoBehaviour
                 ingredientsImage2.sprite = potato;
                 ingredientsImage3.sprite = carrot;
                 ingredientsImage4.sprite = onion;
+                dispIngredientsMap[1] = Ingredients.MEET;
+                dispIngredientsMap[2] = Ingredients.POTATO;
+                dispIngredientsMap[3] = Ingredients.CARROT;
+                dispIngredientsMap[4] = Ingredients.ONION;
                 break;
             case Dish.BOILED_EGG:
                 ingredientsImage1.sprite = egg;
                 ingredientsImage2.sprite = null;
                 ingredientsImage3.sprite = null;
                 ingredientsImage4.sprite = null;
+                dispIngredientsMap[1] = Ingredients.EGG;
+                dispIngredientsMap[2] = Ingredients.NONE;
+                dispIngredientsMap[3] = Ingredients.NONE;
+                dispIngredientsMap[4] = Ingredients.NONE;
                 break;
             case Dish.FRIED_POTATO:
                 ingredientsImage1.sprite = potato;
                 ingredientsImage2.sprite = null;
                 ingredientsImage3.sprite = null;
                 ingredientsImage4.sprite = null;
+                dispIngredientsMap[1] = Ingredients.POTATO;
+                dispIngredientsMap[2] = Ingredients.NONE;
+                dispIngredientsMap[3] = Ingredients.NONE;
+                dispIngredientsMap[4] = Ingredients.NONE;
                 break;
             case Dish.GRATIN:
                 ingredientsImage1.sprite = meet;
                 ingredientsImage2.sprite = potato;
                 ingredientsImage3.sprite = onion;
                 ingredientsImage4.sprite = null;
+                dispIngredientsMap[1] = Ingredients.MEET;
+                dispIngredientsMap[2] = Ingredients.POTATO;
+                dispIngredientsMap[3] = Ingredients.ONION;
+                dispIngredientsMap[4] = Ingredients.NONE;
                 break;
             case Dish.HUMBERG:
                 ingredientsImage1.sprite = meet;
                 ingredientsImage2.sprite = egg;
                 ingredientsImage3.sprite = onion;
                 ingredientsImage4.sprite = null;
+                dispIngredientsMap[1] = Ingredients.MEET;
+                dispIngredientsMap[2] = Ingredients.EGG;
+                dispIngredientsMap[3] = Ingredients.ONION;
+                dispIngredientsMap[4] = Ingredients.NONE;
                 break;
             case Dish.OMULET:
                 ingredientsImage1.sprite = egg;
                 ingredientsImage2.sprite = onion;
                 ingredientsImage3.sprite = carrot;
                 ingredientsImage4.sprite = null;
+                dispIngredientsMap[1] = Ingredients.EGG;
+                dispIngredientsMap[2] = Ingredients.ONION;
+                dispIngredientsMap[3] = Ingredients.CARROT;
+                dispIngredientsMap[4] = Ingredients.NONE;
                 break;
             case Dish.STEW:
                 ingredientsImage1.sprite = meet;
                 ingredientsImage2.sprite = potato;
                 ingredientsImage3.sprite = carrot;
                 ingredientsImage4.sprite = onion;
+                dispIngredientsMap[1] = Ingredients.MEET;
+                dispIngredientsMap[2] = Ingredients.POTATO;
+                dispIngredientsMap[3] = Ingredients.CARROT;
+                dispIngredientsMap[4] = Ingredients.ONION;
                 break;
             case Dish.TONKATSU:
                 ingredientsImage1.sprite = meet;
                 ingredientsImage2.sprite = egg;
                 ingredientsImage3.sprite = null;
                 ingredientsImage4.sprite = null;
+                dispIngredientsMap[1] = Ingredients.MEET;
+                dispIngredientsMap[2] = Ingredients.EGG;
+                dispIngredientsMap[3] = Ingredients.NONE;
+                dispIngredientsMap[4] = Ingredients.NONE;
                 break;
             default:
                 ingredientsImage1.sprite = meet;
                 ingredientsImage2.sprite = potato;
                 ingredientsImage3.sprite = carrot;
                 ingredientsImage4.sprite = onion;
+                dispIngredientsMap[1] = Ingredients.MEET;
+                dispIngredientsMap[2] = Ingredients.POTATO;
+                dispIngredientsMap[3] = Ingredients.CARROT;
+                dispIngredientsMap[4] = Ingredients.ONION;
                 break;
+        }
+    }
+
+    private void ResetDispIngredientsMap()
+    {
+        if (dispIngredientsMap == null)
+        {
+            dispIngredientsMap = new Dictionary<int, Ingredients>
+            {
+                {1, Ingredients.NONE},
+                {2, Ingredients.NONE},
+                {3, Ingredients.NONE},
+                {4, Ingredients.NONE}
+            };
+        }
+        else
+        {
+            dispIngredientsMap[1] = Ingredients.NONE;
+            dispIngredientsMap[2] = Ingredients.NONE;
+            dispIngredientsMap[3] = Ingredients.NONE;
+            dispIngredientsMap[4] = Ingredients.NONE;
         }
     }
 }

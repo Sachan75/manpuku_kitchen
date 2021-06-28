@@ -1036,6 +1036,10 @@ MonoBehaviour:
   ingredientsObj2: {fileID: 1763287579}
   ingredientsObj3: {fileID: 254161824}
   ingredientsObj4: {fileID: 784759749}
+  maruObj1: {fileID: 2024677109}
+  maruObj2: {fileID: 208307323}
+  maruObj3: {fileID: 1062570198}
+  maruObj4: {fileID: 74722657}
 --- !u!1 &1117731136
 GameObject:
   m_ObjectHideFlags: 0

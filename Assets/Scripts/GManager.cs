@@ -100,7 +100,7 @@ public class GManager : MonoBehaviour
     /// <summary>
     /// 集めた素材をリセット（すべて false に）する.
     /// </summary>
-    public void resetIngredients()
+    public void ResetIngredients()
     {
         hasCarrot = hasEgg = hasMeet = hasOnion = hasPotato = false;
     }
