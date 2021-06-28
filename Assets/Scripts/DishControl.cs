@@ -17,6 +17,14 @@ public class DishControl : MonoBehaviour
     public GameObject ingredientsObj3;
     [Header("素材のゲームオブジェクト４")]
     public GameObject ingredientsObj4;
+    [Header("丸（素材のチェック用）のゲームオブジェクト１")]
+    public GameObject maruObj1;
+    [Header("丸（素材のチェック用）のゲームオブジェクト２")]
+    public GameObject maruObj2;
+    [Header("丸（素材のチェック用）のゲームオブジェクト３")]
+    public GameObject maruObj3;
+    [Header("丸（素材のチェック用）のゲームオブジェクト４")]
+    public GameObject maruObj4;
 
     // お題（クリアする食事）
     private Dish dishTheme;
@@ -28,6 +36,8 @@ public class DishControl : MonoBehaviour
     private Image ingredientsImage1, ingredientsImage2, ingredientsImage3, ingredientsImage4;
     // 素材のスプライト
     private Sprite carrot, egg, meet, onion, potato;
+    // 素材のゲームオブジェクト１～４にどの素材があてられてるかを管理するマップ
+    private Dictionary<int, Ingredients> dispIngredientsMap;
     void Start()
     {
         // 画像の読み込み 
@@ -52,7 +62,10 @@ public class DishControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (GManager.instance.HasIngredients(Ingredients.CARROT))
+        {
+            maruObj1.
+        }
     }
 
     /// <summary>
