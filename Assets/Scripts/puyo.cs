@@ -76,7 +76,7 @@ public class Puyo : MonoBehaviour
                 // ‚Õ‚æ‚Ì‰ñ“]
                 transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), -90);
 
-                if (Object.FindObjectOfType<Set>().rotationFlg == 1)
+                if (!ValidMovement())
                 {
                     transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), +90);
                     
