@@ -6,18 +6,18 @@ public class Puyo : MonoBehaviour
 {
     GameObject[] puyos;
     GameObject Director;
-    public int num = 0;    //num=0‚Å—‰º‚µAI—¹‚Éfallcheck‚ÖAnum=1‚È‚ç‹x~
+    public int num = 0;    //num=0ã§è½ä¸‹ã—ã€çµ‚äº†æ™‚ã«fallcheckã¸ã€num=1ãªã‚‰ä¼‘æ­¢
     float[] puyox = new float[100];
     float[] puyoy = new float[100];
 
     public float previousTime;
 
-    // mino‰ñ“]
+    // minoå›è»¢
     public Vector3 rotationPoint;
 
     private void Start()
     {
-        
+
     }
 
 
@@ -29,7 +29,7 @@ public class Puyo : MonoBehaviour
         this.puyos = GameObject.FindGameObjectsWithTag("puyo");
         foreach (GameObject puyo in this.puyos)
         {
-            //ŠÛ‚ßŒë·‰ğÁiƒtƒB[ƒ‹ƒg’†‚Ì‘S‚Õ‚æ‚ÌˆÊ’uj
+            //ä¸¸ã‚èª¤å·®è§£æ¶ˆï¼ˆãƒ•ã‚£ãƒ¼ãƒ«ãƒˆä¸­ã®å…¨ã·ã‚ˆã®ä½ç½®ï¼‰
             this.puyox[i] = Mathf.RoundToInt(puyo.transform.position.x * 10.0f) / 10.0f;
             this.puyoy[i] = Mathf.RoundToInt(puyo.transform.position.y * 10.0f) / 10.0f;
             i++;
@@ -38,17 +38,17 @@ public class Puyo : MonoBehaviour
         MinoMovememt();
 
         i = 0;
-        //ŠÛ‚ßŒë·‰ğÁi©•ª‚Ì¡‚ÌˆÊ’uj
+        //ä¸¸ã‚èª¤å·®è§£æ¶ˆï¼ˆè‡ªåˆ†ã®ä»Šã®ä½ç½®ï¼‰
         double nowx = Mathf.RoundToInt(transform.position.x * 10.0f) / 10.0f;
         double nowy = Mathf.RoundToInt(transform.position.y * 10.0f) / 10.0f;
 
-        if (this.num == 1) return;  //—‰ºŠ®—¹Ï‚È‚Ì‚ÅˆÈ‰º‚Ìˆ—•s—v
+        if (this.num == 1) return;  //è½ä¸‹å®Œäº†æ¸ˆãªã®ã§ä»¥ä¸‹ã®å‡¦ç†ä¸è¦
         if (transform.root.gameObject == gameObject)
         {
-            //ƒRƒ“ƒr‰ğUŒã‚Ì‹““®‚ğ‹Lq
+            //ã‚³ãƒ³ãƒ“è§£æ•£å¾Œã®æŒ™å‹•ã‚’è¨˜è¿°
             if (nowy == 1.5f)
             {
-                this.num = 1;   //—‰ºŠ®—¹‚ğ‚¨’m‚ç‚¹
+                this.num = 1;   //è½ä¸‹å®Œäº†ã‚’ãŠçŸ¥ã‚‰ã›
                 return;
             }
             i = 0;
@@ -56,12 +56,12 @@ public class Puyo : MonoBehaviour
             {
                 if (nowx == this.puyox[i] && nowy == this.puyoy[i] + 1.0f)
                 {
-                    this.num = 1;   //—‰ºŠ®—¹‚ğ‚¨’m‚ç‚¹
+                    this.num = 1;   //è½ä¸‹å®Œäº†ã‚’ãŠçŸ¥ã‚‰ã›
                     return;
                 }
                 i++;
             }
-            //—‰ºŠ®—¹‚µ‚Ä‚¢‚È‚¢‚Ì‚Åˆø‚«‘±‚«—‰º
+            //è½ä¸‹å®Œäº†ã—ã¦ã„ãªã„ã®ã§å¼•ãç¶šãè½ä¸‹
             transform.Translate(0, -1.0f, 0, Space.World);
         }
 
@@ -73,13 +73,13 @@ public class Puyo : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                // ‚Õ‚æ‚Ì‰ñ“]
+                // ã·ã‚ˆã®å›è»¢
                 transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), -90);
 
                 if (!ValidMovement())
                 {
                     transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), +90);
-                    
+
                 }
 
 
@@ -87,7 +87,7 @@ public class Puyo : MonoBehaviour
         }
     }
 
-    // mino‚ÌˆÚ“®”ÍˆÍ‚Ì§Œä
+    // minoã®ç§»å‹•ç¯„å›²ã®åˆ¶å¾¡
     bool ValidMovement()
     {
 
@@ -97,7 +97,7 @@ public class Puyo : MonoBehaviour
             double roundX = Mathf.RoundToInt(children.transform.position.x);
             double roundY = Mathf.RoundToInt(children.transform.position.y);
 
-            // mino‚ªƒXƒe[ƒW‚æ‚è‚Í‚İo‚³‚È‚¢‚æ‚¤‚É§Œä
+            // minoãŒã‚¹ãƒ†ãƒ¼ã‚¸ã‚ˆã‚Šã¯ã¿å‡ºã•ãªã„ã‚ˆã†ã«åˆ¶å¾¡
             if (roundX <= 4.0 || roundX >= 11.0 || roundY <= 1.0)
             {
                 return false;

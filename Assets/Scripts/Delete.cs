@@ -5,103 +5,104 @@ using UnityEngine;
 public class Delete : MonoBehaviour
 {
 
-	GameObject[] puyos;
-	List<int> samecolorset = new List<int>();
-	float[] puyox = new float[100];
-	float[] puyoy = new float[100];
-	int[] checks = new int[100];
-	int[] samecolornums = new int[100];
+    GameObject[] puyos;
+    List<int> samecolorset = new List<int>();
+    float[] puyox = new float[100];
+    float[] puyoy = new float[100];
+    int[] checks = new int[100];
+    int[] samecolornums = new int[100];
 
-	// Start is called before the first frame update
-	void Start()
+    // Start is called before the first frame update
+    void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-		
-	}
+
+    }
 
     public void init()
-	{
-		this.puyos = GameObject.FindGameObjectsWithTag("puyo");
-		int i = 0;
-		foreach (GameObject puyo in this.puyos)
-		{
-			//checks[i]Fi”Ô‚Õ‚æ‚ÌŠm”Fì‹ÆI—¹ƒtƒ‰ƒOc0F–¢Š®—¹A1FŠ®—¹
-			this.checks[i] = 0;
-			//samecolornums[i]Fi”Ô‚Õ‚æ‚Æ—×‚è‡‚Á‚Ä‚¢‚é“¯F‚Õ‚æ‚Ì”AŠî–{‚Í1i©•ª©gj
-			this.samecolornums[i] = 1;
-			//puyox[i],puyoy[i]Fi”Ô‚Õ‚æ‚ÌˆÊ’uÀ•WiŠÛ‚ßŒë·‘ÎôÏj
-			this.puyox[i] = Mathf.RoundToInt(puyo.transform.position.x * 10.0f) / 10.0f;
-			this.puyoy[i] = Mathf.RoundToInt(puyo.transform.position.y * 10.0f) / 10.0f;
-			i++;
-		}
-	}
+    {
+        this.puyos = GameObject.FindGameObjectsWithTag("puyo");
+        int i = 0;
+        foreach (GameObject puyo in this.puyos)
+        {
+            //checks[i]ï¼šiç•ªã·ã‚ˆã®ç¢ºèªä½œæ¥­çµ‚äº†ãƒ•ãƒ©ã‚°â€¦0ï¼šæœªå®Œäº†ã€1ï¼šå®Œäº†
+            this.checks[i] = 0;
+            //samecolornums[i]ï¼šiç•ªã·ã‚ˆã¨éš£ã‚Šåˆã£ã¦ã„ã‚‹åŒè‰²ã·ã‚ˆã®æ•°ã€åŸºæœ¬ã¯1ï¼ˆè‡ªåˆ†è‡ªèº«ï¼‰
+            this.samecolornums[i] = 1;
+            //puyox[i],puyoy[i]ï¼šiç•ªã·ã‚ˆã®ä½ç½®åº§æ¨™ï¼ˆä¸¸ã‚èª¤å·®å¯¾ç­–æ¸ˆï¼‰
+            this.puyox[i] = Mathf.RoundToInt(puyo.transform.position.x * 10.0f) / 10.0f;
+            this.puyoy[i] = Mathf.RoundToInt(puyo.transform.position.y * 10.0f) / 10.0f;
+            i++;
+        }
+    }
 
-    public void puyoDestroy() {
+    public void puyoDestroy()
+    {
 
-		List<int> samecolorset = new List<int>();
-		int i = 0;
-		foreach (GameObject puyo in this.puyos)
-		{
-			this.samecolorset.Clear();
-			Check(i);
-			for (int k = 0; k < this.samecolorset.Count; k++)
-			{
-				//i”Ô‚Õ‚æ‚Æ—×Ú“¯F‚Õ‚æ‚Ìsamecolornums‚ÉƒJƒEƒ“ƒgŒ‹‰Ê‚ğ‘ã“ü
-				this.samecolornums[this.samecolorset[k]] = this.samecolorset.Count;
-			}
-			i++;
-		}
+        List<int> samecolorset = new List<int>();
+        int i = 0;
+        foreach (GameObject puyo in this.puyos)
+        {
+            this.samecolorset.Clear();
+            Check(i);
+            for (int k = 0; k < this.samecolorset.Count; k++)
+            {
+                //iç•ªã·ã‚ˆã¨éš£æ¥åŒè‰²ã·ã‚ˆã®samecolornumsã«ã‚«ã‚¦ãƒ³ãƒˆçµæœã‚’ä»£å…¥
+                this.samecolornums[this.samecolorset[k]] = this.samecolorset.Count;
+            }
+            i++;
+        }
 
-		i = 0;
-		foreach (GameObject puyo in this.puyos)
-		{
-			if (this.samecolornums[i] >= 4)
-			{
-				Destroy(puyo);
-			}
-			i++;
-		}
-	}
+        i = 0;
+        foreach (GameObject puyo in this.puyos)
+        {
+            if (this.samecolornums[i] >= 4)
+            {
+                Destroy(puyo);
+            }
+            i++;
+        }
+    }
 
-	public void Check(int i)
-	{
-		this.samecolorset.Add(i);
-		//Œ³‚©‚çchecks[i]=1‚È‚çi”Ô‚Õ‚æ‚Í’²¸Ï‚È‚Ì‚ÅŠm”F‚µ‚È‚¢
-		if (this.checks[i] == 1) return;
-		this.checks[i] = 1;    //‚±‚ê‚©‚çi”Ô‚Õ‚æ‚ğ’²¸‚·‚é‚Ì‚Å0¨1‚É’¼‚µ‚Ä‚¨‚­
-		for (int j = 0; j < this.puyos.Length; j++)
-		{
-			if (this.puyox[i] == this.puyox[j] && this.puyoy[i] == this.puyoy[j] + 1.0f &&
-			this.puyos[i].transform.name == this.puyos[j].transform.name && this.checks[j] == 0)
-			{
-				// <span class="crayon-c">‰ºij”Ô‚Õ‚æF–¢’²¸j‚Æ©•ª©gii”Ô‚Õ‚æj‚ª“¯F</span>
-				Check(j);
-			}
-			if (this.puyox[i] == this.puyox[j] && this.puyoy[i] == this.puyoy[j] - 1.0f &&
-			this.puyos[i].transform.name == this.puyos[j].transform.name && this.checks[j] == 0)
-			{
-				// <span class="crayon-c">ãij”Ô‚Õ‚æF–¢’²¸j‚Æ©•ª©gii”Ô‚Õ‚æj‚ª“¯F</span>
-				Check(j);
-			}
-			if (this.puyox[i] == this.puyox[j] + 1.0f && this.puyoy[i] == this.puyoy[j] &&
-			this.puyos[i].transform.name == this.puyos[j].transform.name && this.checks[j] == 0)
-			{
-				// <span class="crayon-c">¶ij”Ô‚Õ‚æF–¢’²¸j‚Æ©•ª©gii”Ô‚Õ‚æj‚ª“¯F</span>
-				Check(j);
-			}
-			if (this.puyox[i] == this.puyox[j] - 1.0f && this.puyoy[i] == this.puyoy[j] &&
-			this.puyos[i].transform.name == this.puyos[j].transform.name && this.checks[j] == 0)
-			{
-				// <span class="crayon-c">‰Eij”Ô‚Õ‚æF–¢’²¸j‚Æ©•ª©gii”Ô‚Õ‚æj‚ª“¯F</span>
-				Check(j);
-			}
-		}
-		return;
-	}
+    public void Check(int i)
+    {
+        this.samecolorset.Add(i);
+        //å…ƒã‹ã‚‰checks[i]=1ãªã‚‰iç•ªã·ã‚ˆã¯èª¿æŸ»æ¸ˆãªã®ã§ç¢ºèªã—ãªã„
+        if (this.checks[i] == 1) return;
+        this.checks[i] = 1;    //ã“ã‚Œã‹ã‚‰iç•ªã·ã‚ˆã‚’èª¿æŸ»ã™ã‚‹ã®ã§0â†’1ã«ç›´ã—ã¦ãŠã
+        for (int j = 0; j < this.puyos.Length; j++)
+        {
+            if (this.puyox[i] == this.puyox[j] && this.puyoy[i] == this.puyoy[j] + 1.0f &&
+            this.puyos[i].transform.name == this.puyos[j].transform.name && this.checks[j] == 0)
+            {
+                // <span class="crayon-c">ä¸‹ï¼ˆjç•ªã·ã‚ˆï¼šæœªèª¿æŸ»ï¼‰ã¨è‡ªåˆ†è‡ªèº«ï¼ˆiç•ªã·ã‚ˆï¼‰ãŒåŒè‰²</span>
+                Check(j);
+            }
+            if (this.puyox[i] == this.puyox[j] && this.puyoy[i] == this.puyoy[j] - 1.0f &&
+            this.puyos[i].transform.name == this.puyos[j].transform.name && this.checks[j] == 0)
+            {
+                // <span class="crayon-c">ä¸Šï¼ˆjç•ªã·ã‚ˆï¼šæœªèª¿æŸ»ï¼‰ã¨è‡ªåˆ†è‡ªèº«ï¼ˆiç•ªã·ã‚ˆï¼‰ãŒåŒè‰²</span>
+                Check(j);
+            }
+            if (this.puyox[i] == this.puyox[j] + 1.0f && this.puyoy[i] == this.puyoy[j] &&
+            this.puyos[i].transform.name == this.puyos[j].transform.name && this.checks[j] == 0)
+            {
+                // <span class="crayon-c">å·¦ï¼ˆjç•ªã·ã‚ˆï¼šæœªèª¿æŸ»ï¼‰ã¨è‡ªåˆ†è‡ªèº«ï¼ˆiç•ªã·ã‚ˆï¼‰ãŒåŒè‰²</span>
+                Check(j);
+            }
+            if (this.puyox[i] == this.puyox[j] - 1.0f && this.puyoy[i] == this.puyoy[j] &&
+            this.puyos[i].transform.name == this.puyos[j].transform.name && this.checks[j] == 0)
+            {
+                // <span class="crayon-c">å³ï¼ˆjç•ªã·ã‚ˆï¼šæœªèª¿æŸ»ï¼‰ã¨è‡ªåˆ†è‡ªèº«ï¼ˆiç•ªã·ã‚ˆï¼‰ãŒåŒè‰²</span>
+                Check(j);
+            }
+        }
+        return;
+    }
 
 }
