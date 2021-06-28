@@ -47,7 +47,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   previousTime: 0
   fallTime: 1
+  fallCompFlg: 0
   rotationPoint: {x: 0, y: 0, z: 0}
+  rotationFlg: 0
+  rotationCond: 0
   puyos: []
 --- !u!1 &5472615303775331854
 GameObject:
@@ -144,8 +147,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c68c01b85d6b484e9ca13b7f62fb14a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  num: 0
   previousTime: 0
   rotationPoint: {x: 0, y: 0, z: 0}
+  ingredient: 4
 --- !u!1 &6361861030394465463
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,5 +246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c68c01b85d6b484e9ca13b7f62fb14a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  num: 0
   previousTime: 0
   rotationPoint: {x: 0, y: 0, z: 0}
+  ingredient: 4

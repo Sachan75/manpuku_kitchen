@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using manpuku_kitchen.Utils;
 
 public class Puyo : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class Puyo : MonoBehaviour
 
     // mino回転
     public Vector3 rotationPoint;
+
+    [Header("素材の種類")]
+    public Ingredients ingredient;
 
     private void Start()
     {
