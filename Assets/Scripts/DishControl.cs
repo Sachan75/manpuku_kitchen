@@ -36,7 +36,6 @@ public class DishControl : MonoBehaviour
 
         // 初回のお題を決定
         dishTheme = LoadDishTheme();
-        Debug.Log(dishTheme);
 
         // お題の画像を表示
         LoadDishSprite();
