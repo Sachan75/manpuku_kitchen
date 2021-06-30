@@ -19,6 +19,11 @@ public class Puyo : MonoBehaviour
     [Header("素材の種類")]
     public Ingredients ingredient;
 
+    // minoの落ちる時間
+    public float fallTime = 1f;
+    //落下完了フラグ
+    public int fallCompFlg = 0;
+
     private void Start()
     {
 
@@ -53,6 +58,8 @@ public class Puyo : MonoBehaviour
             if (nowy == 1.5f)
             {
                 this.num = 1;   //落下完了をお知らせ
+                FindObjectOfType<Delete>().init();
+                FindObjectOfType<Delete>().puyoDestroy();
                 return;
             }
             i = 0;
@@ -61,6 +68,8 @@ public class Puyo : MonoBehaviour
                 if (nowx == this.puyox[i] && nowy == this.puyoy[i] + 1.0f)
                 {
                     this.num = 1;   //落下完了をお知らせ
+                    FindObjectOfType<Delete>().init();
+                    FindObjectOfType<Delete>().puyoDestroy();
                     return;
                 }
                 i++;
@@ -80,12 +89,30 @@ public class Puyo : MonoBehaviour
                 // ぷよの回転
                 transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), -90);
 
-                if (!ValidMovement())
+                if (FindObjectOfType<Set>().rotationFlg == 1)
                 {
                     transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), +90);
 
                 }
 
+
+            }
+        }
+        else if (transform.root.gameObject == gameObject)
+        {
+            if (Time.time - previousTime >= fallTime)
+            {
+                transform.position += new Vector3(0, -1, 0);
+
+                if (!ValidMovement())
+                {
+                    transform.position -= new Vector3(0, -1, 0);
+                    //fallCompFlg = 1;
+                    this.enabled = false;
+
+                }
+
+                previousTime = Time.time;
 
             }
         }
@@ -95,18 +122,35 @@ public class Puyo : MonoBehaviour
     bool ValidMovement()
     {
 
+        double roundX = Mathf.RoundToInt(transform.position.x);
+        double roundY = Mathf.RoundToInt(transform.position.y);
 
-        foreach (Transform children in transform)
+        // minoがステージよりはみ出さないように制御
+        if (roundX <= 4.0 || roundX >= 11.0 || roundY <= 1.0)
         {
-            double roundX = Mathf.RoundToInt(children.transform.position.x);
-            double roundY = Mathf.RoundToInt(children.transform.position.y);
+            return false;
+        }
 
-            // minoがステージよりはみ出さないように制御
-            if (roundX <= 4.0 || roundX >= 11.0 || roundY <= 1.0)
+        this.puyos = GameObject.FindGameObjectsWithTag("puyo");
+
+        int i = 0;
+        foreach (GameObject puyo in this.puyos)
+        {
+            //丸め誤差解消
+            this.puyox[i] = Mathf.RoundToInt(puyo.transform.position.x * 10.0f) / 10.0f;
+            this.puyoy[i] = Mathf.RoundToInt(puyo.transform.position.y * 10.0f) / 10.0f;
+            i++;
+
+        }
+        i = 0;
+        foreach (float x in this.puyox) {
+
+            //落下終了条件
+            if (roundX == this.puyox[i] && roundY == this.puyoy[i] + 1.0f)
             {
                 return false;
             }
-
+            i++;
         }
 
         return true;

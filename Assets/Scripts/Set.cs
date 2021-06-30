@@ -97,8 +97,6 @@ public class Set : MonoBehaviour
                     }
                 }
 
-                FindObjectOfType<Delete>().init();
-                FindObjectOfType<Delete>().puyoDestroy();
                 FindObjectOfType<Spawn>().NewMino();
 
             }
@@ -109,16 +107,16 @@ public class Set : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            rotationFlg = 0;
             // ブロックの回転
+            rotationFlg = 0;
             transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), 90);
             rotationCond += 1;
 
             if (!ValidMovement())
             {
-                rotationFlg = 1;
                 rotationCond -= 1;
                 transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), -90);
+                rotationFlg = 1;
             }
             if(rotationCond == 4)
             {
