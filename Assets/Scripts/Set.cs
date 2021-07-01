@@ -23,6 +23,20 @@ public class Set : MonoBehaviour
 
     private void Start()
     {
+        getFoodsPosition();
+    }
+
+
+
+    void Update()
+    {
+        MinoMovememt();
+
+    }
+
+    //フィールド上の食材（単体）の場所を取得
+    private void getFoodsPosition()
+    {
         this.puyos = GameObject.FindGameObjectsWithTag("puyo");
 
 
@@ -38,14 +52,6 @@ public class Set : MonoBehaviour
         }
     }
 
-
-
-    void Update()
-    {
-        MinoMovememt();
-
-    }
-
     private void MinoMovememt()
     {
         // 左矢印キーで左に動く
@@ -53,6 +59,7 @@ public class Set : MonoBehaviour
         {
             transform.position += new Vector3(-1, 0, 0);
             
+            //エリア外に出てしまう場合は、元の位置に戻す
             if (!ValidMovement())
             {
                 transform.position -= new Vector3(-1, 0, 0);
@@ -64,6 +71,7 @@ public class Set : MonoBehaviour
         {
             transform.position += new Vector3(1, 0, 0);
             
+            //エリア外に出てしまう場合は元の位置に戻す
             if (!ValidMovement())
             {
                 transform.position -= new Vector3(1, 0, 0);
@@ -74,6 +82,7 @@ public class Set : MonoBehaviour
         {
             transform.position += new Vector3(0, -1, 0);
 
+            //エリア外にでるorほかのぷよの上に着地した場合はSTOP
             if (!ValidMovement())
             {
                 transform.position -= new Vector3(0, -1, 0);
