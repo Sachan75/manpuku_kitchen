@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using manpuku_kitchen.Utils;
 
 public class Delete : MonoBehaviour
@@ -12,6 +13,8 @@ public class Delete : MonoBehaviour
     float[] puyoy = new float[100];
     int[] checks = new int[100];
 
+    // アニメーター
+    private Animator animator;
     private Dictionary<Ingredients, List<int>> ingredientsCount;
 
     // Start is called before the first frame update
@@ -60,11 +63,28 @@ public class Delete : MonoBehaviour
             {
                 foreach (int deleteIndex in countList)
                 {
-                    Destroy(this.puyos[deleteIndex]);
+                    animator = this.puyos[deleteIndex].GetComponent<Animator>();
+                    // いったん玉子のみアニメーションをテスト
+                    if (myPuyo.ingredient == Ingredients.EGG)
+                    {
+                        animator.SetBool("cutting", true);
+                    }
+
+                    StartCoroutine(
+                        DelayMethod(1.0f, () =>
+                        {
+                            // いったん玉子のみアニメーションをテスト
+                            if (myPuyo.ingredient == Ingredients.EGG)
+                            {
+                                animator.SetBool("cutting", false);
+                            }
+                            Destroy(this.puyos[deleteIndex]);
+                        })
+                    );
+
                 }
                 GManager.instance.CollectIngredients(myPuyo.ingredient);
             }
-
             i++;
         }
     }
@@ -159,5 +179,9 @@ public class Delete : MonoBehaviour
         }
 
     }
-
+    private IEnumerator DelayMethod(float waitTime, Action action)
+    {
+        yield return new WaitForSeconds(waitTime);
+        action();
+    }
 }
