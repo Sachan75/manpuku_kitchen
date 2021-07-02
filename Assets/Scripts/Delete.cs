@@ -65,16 +65,16 @@ public class Delete : MonoBehaviour
                 {
                     animator = this.puyos[deleteIndex].GetComponent<Animator>();
                     // いったん玉子のみアニメーションをテスト
-                    if (myPuyo.ingredient == Ingredients.EGG)
+                    if (myPuyo.ingredient == Ingredients.EGG || myPuyo.ingredient == Ingredients.CARROT)
                     {
                         animator.SetBool("cutting", true);
                     }
 
                     StartCoroutine(
-                        DelayMethod(1.0f, () =>
+                        DelayMethod(0.5f, () =>
                         {
-                            // いったん玉子のみアニメーションをテスト
-                            if (myPuyo.ingredient == Ingredients.EGG)
+                            // いったん玉子・人参のアニメーションをテスト
+                            if (myPuyo.ingredient == Ingredients.EGG || myPuyo.ingredient == Ingredients.CARROT)
                             {
                                 animator.SetBool("cutting", false);
                             }
