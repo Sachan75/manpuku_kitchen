@@ -80,34 +80,18 @@ public class Set : MonoBehaviour
         // 自動で下に移動させつつ、下矢印キーでも移動する
         else if (Input.GetKeyDown(KeyCode.DownArrow) || Time.time - previousTime >= fallTime)
         {
-            transform.position += new Vector3(0, -1, 0);
-
             //エリア外にでるorほかのぷよの上に着地した場合はSTOP
             if (!ValidMovement())
             {
-                transform.position -= new Vector3(0, -1, 0);
                 fallCompFlg = 1;
                 this.enabled = false;
 
-                if (rotationCond != 2)
-                {
-                    if (transform.position.y == 1.5f)
-                    {
-                        gameObject.transform.DetachChildren();
-                        Destroy(gameObject);
-                    }
-                }
-                else if(rotationCond == 2)
-                {
-                    if (transform.position.y == 2.5f)
-                    {
-                        gameObject.transform.DetachChildren();
-                        Destroy(gameObject);
-                    }
-                }
-
                 FindObjectOfType<Spawn>().NewMino();
 
+            }
+            else
+            {
+                transform.position += new Vector3(0, -1, 0);
             }
 
             previousTime = Time.time;
@@ -136,29 +120,39 @@ public class Set : MonoBehaviour
         }
     }
 
-    // minoの移動範囲の制御
+    // ぷよの移動範囲の制御
     public bool ValidMovement()
     {
+        //親オブジェクトの座標
+        double roundX = Mathf.RoundToInt(gameObject.transform.position.x*10.0f) /10.0f;
+        double roundY = Mathf.RoundToInt(gameObject.transform.position.y*10.0f)/ 10.0f;
+
 
         foreach (Transform children in transform)
         {
-            double roundX = Mathf.RoundToInt(children.transform.position.x);
-            double roundY = Mathf.RoundToInt(children.transform.position.y);
+            //子オブジェクトの座標
+            double childX = Mathf.RoundToInt(children.transform.position.x*10.0f)/10.0f;
+            double childY = Mathf.RoundToInt(children.transform.position.y*10.0f)/10.0f;
 
             // minoがステージよりはみ出さないように制御
-            if (roundX <= 4.0 || roundX >=11.0  || roundY <= 1.0)
+            if (roundY <= 1.5)
+            {
+                gameObject.transform.DetachChildren();    //親子関係の解除
+                Destroy(gameObject);     //ぷよセットオブジェクト（親）を削除
+                return false;
+            }
+            else if(childX <= 4.0)
             {
                 return false;
             }
 
         }
 
+        //ぷよの上に落下するときの判定
         int i = 0;
         foreach (GameObject puyo in this.puyos)
         {
 
-            double roundX = Mathf.RoundToInt(transform.position.x * 10.0f) / 10.0f;
-            double roundY = Mathf.RoundToInt(transform.position.y * 10.0f) / 10.0f;
             if (rotationCond == 0) 
             {
                 //落下終了条件
