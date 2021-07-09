@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
+using System;
 
 public class Set : MonoBehaviour
 {
@@ -22,25 +23,20 @@ public class Set : MonoBehaviour
     float[] puyox = new float[100];
     float[] puyoy = new float[100];
 
-
     private void Start()
     {
         getFoodsPosition();
     }
 
-
-
     void Update()
     {
         MinoMovememt();
-
     }
 
     //フィールド上の食材（単体）の場所を取得
     private void getFoodsPosition()
     {
         this.puyos = GameObject.FindGameObjectsWithTag("puyo");
-
 
         int i = 0;
         foreach (GameObject puyo in this.puyos)
@@ -49,8 +45,6 @@ public class Set : MonoBehaviour
             this.puyox[i] = Mathf.RoundToInt(puyo.transform.position.x * 10.0f) / 10.0f;
             this.puyoy[i] = Mathf.RoundToInt(puyo.transform.position.y * 10.0f) / 10.0f;
             i++;
-
-
         }
     }
 
@@ -66,7 +60,6 @@ public class Set : MonoBehaviour
             {
                 transform.position -= new Vector3(-1, 0, 0);
             }
-
         }
         // 右矢印キーで右に動く
         else if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -87,18 +80,12 @@ public class Set : MonoBehaviour
             {
                 fallCompFlg = 1;
                 this.enabled = false;
-
-                // FindObjectOfType<Spawn>().NewMino();
-
             }
             else
             {
                 transform.position += new Vector3(0, -1, 0);
             }
-
             previousTime = Time.time;
-
-
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
@@ -106,7 +93,6 @@ public class Set : MonoBehaviour
             rotationFlg = 0;
             transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), 90);
             rotationCond += 1;
-
             if (!ValidMovement())
             {
                 rotationCond -= 1;
@@ -117,8 +103,6 @@ public class Set : MonoBehaviour
             {
                 rotationCond = 0;
             }
-
-
         }
     }
 
@@ -129,24 +113,34 @@ public class Set : MonoBehaviour
         double roundX = Mathf.RoundToInt(gameObject.transform.position.x * 10.0f) / 10.0f;
         double roundY = Mathf.RoundToInt(gameObject.transform.position.y * 10.0f) / 10.0f;
 
-
         foreach (Transform children in transform)
         {
+            // ぷよがステージよりはみ出さないように制御
+            if (rotationCond == 2)
+            {
+                // 反転（90°）の場合
+                if (roundY <= 2.5)
+                {
+                    DivideIngredient();
+                    return false;
+                }
+            }
+            else
+            {
+                // 反転意外の場合
+                if (roundY <= 1.5)
+                {
+                    DivideIngredient();
+                    return false;
+                }
+            }
             //子オブジェクトの座標
             double childX = Mathf.RoundToInt(children.transform.position.x * 10.0f) / 10.0f;
-            double childY = Mathf.RoundToInt(children.transform.position.y * 10.0f) / 10.0f;
 
-            // minoがステージよりはみ出さないように制御
-            if ((rotationCond == 0 && roundY <= 1.5) || (rotationCond == 2 && roundY <= 2.5))
-            {
-                DivideIngredient();
-                return false;
-            }
-            else if (childX < 5.0 || 10.0 < childX)
+            if (childX < 5.0 || 10.0 < childX)
             {
                 return false;
             }
-
         }
 
         //ぷよの上に落下するときの判定
@@ -214,7 +208,7 @@ public class Set : MonoBehaviour
                 // 連鎖後など下のぷよが落下前の場合は次ループにすすめる
                 if (!CheckFalled())
                 {
-                    Debug.Log("最下行まで落ちていないため再ループ");
+                    Debug.Log("落ちきってないので再ループ");
                     Restart();
                     continue;
                 }
@@ -242,12 +236,30 @@ public class Set : MonoBehaviour
     {
         // どこかの列で最下行まできていない列がある場合は落下途中
         bool isFalled = true;
-        foreach (var dict in MinYPerX())
+
+        foreach (var dict in YsPerX())
         {
-            Debug.Log("X:" + dict.Key + ", Y（最下点）:" + dict.Value);
-            if (dict.Value > 2.0)
+            int i = 0;
+            float last = 0.5f;
+            foreach (var y in dict.Value)
             {
-                isFalled = false;
+                if (i == 0)
+                {
+                    // 一番下が最下行ではない場合
+                    Debug.Log("一番下まで落ちてない！");
+                    if (y > 1.5)
+                    {
+                        isFalled = false;
+                    }
+                }
+                else if (y - last > 1.0)
+                {
+                    // ぷよとぷよの間に隙間ができている場合
+                    Debug.Log("すきまができている！");
+                    isFalled = false;
+                }
+                i++;
+                last = y;
             }
         }
         // 全部落下済み
@@ -256,7 +268,6 @@ public class Set : MonoBehaviour
 
     void Restart()
     {
-
         var puyos = GameObject.FindGameObjectsWithTag("puyo");
         foreach (GameObject puyoGo in puyos)
         {
@@ -277,7 +288,7 @@ public class Set : MonoBehaviour
     {
         var puyos = GameObject.FindGameObjectsWithTag("puyo");
         var isFinishFall = true;
-        await Task.Delay(500);
+        await Task.Delay(100);
         foreach (GameObject puyoGo in puyos)
         {
             if (puyoGo == null)
@@ -298,30 +309,38 @@ public class Set : MonoBehaviour
         return "await";
     }
 
-    Dictionary<float, float> MinYPerX()
+    Dictionary<float, List<float>> YsPerX()
     {
         // 座標の再取得
         getFoodsPosition();
 
-        Dictionary<float, float> minYPerX = new Dictionary<float, float>();
+        var ysPerX = new Dictionary<float, List<float>>();
         int i = 0;
         foreach (float x in this.puyox)
         {
-            if (minYPerX.ContainsKey(x))
+            // 枠外のデータは除外
+            if (x < 5.0 || 10.0 < x)
             {
-                // X列について、ディクショナリーの高さよりも今回ループの高さが低い場合はつめ直し（一番低い点がほしいから）
-                if (minYPerX[x] > this.puyoy[i])
-                {
-                    minYPerX[x] = this.puyoy[i];
-                }
+                continue;
+            }
+
+            if (ysPerX.ContainsKey(x))
+            {
+                ysPerX[x].Add(this.puyoy[i]);
             }
             else
             {
-                minYPerX[x] = this.puyoy[i];
+                ysPerX[x] = new List<float>();
+                ysPerX[x].Add(this.puyoy[i]);
             }
             i++;
         }
-        return minYPerX;
+
+        foreach (var dict in ysPerX)
+        {
+            dict.Value.Sort();
+        }
+        return ysPerX;
     }
 
 }
