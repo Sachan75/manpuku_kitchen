@@ -32,7 +32,6 @@ public class Set : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("ぷよセット側➜Update呼び出し");
         MinoMovememt();
 
     }
@@ -138,12 +137,12 @@ public class Set : MonoBehaviour
             double childY = Mathf.RoundToInt(children.transform.position.y * 10.0f) / 10.0f;
 
             // minoがステージよりはみ出さないように制御
-            if (roundY <= 1.5)
+            if ((rotationCond == 0 && roundY <= 1.5) || (rotationCond == 2 && roundY <= 2.5))
             {
                 DivideIngredient();
                 return false;
             }
-            else if (childX <= 4.0)
+            else if (childX < 5.0 || 10.0 < childX)
             {
                 return false;
             }
@@ -154,7 +153,7 @@ public class Set : MonoBehaviour
         int i = 0;
         foreach (GameObject puyo in this.puyos)
         {
-
+            // そのまま（0°）
             if (rotationCond == 0)
             {
                 //落下終了条件
@@ -164,27 +163,27 @@ public class Set : MonoBehaviour
                     return false;
                 }
             }
+            // 90°
             else if (rotationCond == 1)
             {
-                //落下終了条件
                 if (roundX == this.puyox[i] && roundY == this.puyoy[i] + 1.0f || roundX == this.puyox[i] + 1.0f && roundY == this.puyoy[i] + 1.0f)
                 {
                     DivideIngredient();
                     return false;
                 }
             }
+            //180°
             else if (rotationCond == 2)
             {
-                //落下終了条件
                 if (roundX == this.puyox[i] && roundY == this.puyoy[i] + 2.0f)
                 {
                     DivideIngredient();
                     return false;
                 }
             }
+            //270°
             else if (rotationCond == 3)
             {
-                //落下終了条件
                 if (roundX == this.puyox[i] && roundY == this.puyoy[i] + 1.0f || roundX == this.puyox[i] - 1.0f && roundY == this.puyoy[i] + 1.0f)
                 {
                     DivideIngredient();
@@ -207,16 +206,23 @@ public class Set : MonoBehaviour
 
         for (; ; )
         {
-            var str = await CheckFall();
-            Debug.Log(str);
+            var finishOrAwait = await CheckFall();
+            Debug.Log(finishOrAwait);
 
-            if (str == "finish")
+            if (finishOrAwait == "finish")
             {
+                // 連鎖後など下のぷよが落下前の場合は次ループにすすめる
+                if (!CheckFalled())
+                {
+                    Debug.Log("最下行まで落ちていないため再ループ");
+                    Restart();
+                    continue;
+                }
 
                 FindObjectOfType<Delete>().init();
                 int destroyCount = await FindObjectOfType<Delete>().puyoDestroy();
 
-                Debug.Log("削除件数➜" + destroyCount);
+                Debug.Log("Set:削除件数➜" + destroyCount);
                 if (destroyCount == 0)
                 {
                     FindObjectOfType<Spawn>().NewMino();
@@ -232,8 +238,25 @@ public class Set : MonoBehaviour
         }
     }
 
+    bool CheckFalled()
+    {
+        // どこかの列で最下行まできていない列がある場合は落下途中
+        bool isFalled = true;
+        foreach (var dict in MinYPerX())
+        {
+            Debug.Log("X:" + dict.Key + ", Y（最下点）:" + dict.Value);
+            if (dict.Value > 2.0)
+            {
+                isFalled = false;
+            }
+        }
+        // 全部落下済み
+        return isFalled;
+    }
+
     void Restart()
     {
+
         var puyos = GameObject.FindGameObjectsWithTag("puyo");
         foreach (GameObject puyoGo in puyos)
         {
@@ -273,6 +296,32 @@ public class Set : MonoBehaviour
             return "finish";
         }
         return "await";
+    }
+
+    Dictionary<float, float> MinYPerX()
+    {
+        // 座標の再取得
+        getFoodsPosition();
+
+        Dictionary<float, float> minYPerX = new Dictionary<float, float>();
+        int i = 0;
+        foreach (float x in this.puyox)
+        {
+            if (minYPerX.ContainsKey(x))
+            {
+                // X列について、ディクショナリーの高さよりも今回ループの高さが低い場合はつめ直し（一番低い点がほしいから）
+                if (minYPerX[x] > this.puyoy[i])
+                {
+                    minYPerX[x] = this.puyoy[i];
+                }
+            }
+            else
+            {
+                minYPerX[x] = this.puyoy[i];
+            }
+            i++;
+        }
+        return minYPerX;
     }
 
 }
