@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Threading.Tasks;
 using manpuku_kitchen.Utils;
 
 public class Delete : MonoBehaviour
@@ -45,9 +46,10 @@ public class Delete : MonoBehaviour
         }
     }
 
-    public void puyoDestroy()
+    async public Task<int> puyoDestroy()
     {
 
+        int destroyCount = 0;
         List<int> samecolorset = new List<int>();
         int i = 0;
         foreach (GameObject puyo in this.puyos)
@@ -56,6 +58,11 @@ public class Delete : MonoBehaviour
             ResetIngredientsCount();
 
             Check(i);
+
+            if (this.puyos[i] == null)
+            {
+                continue;
+            }
 
             var myPuyo = this.puyos[i].GetComponent<Puyo>();
             var countList = this.ingredientsCount[myPuyo.ingredient];
@@ -70,8 +77,7 @@ public class Delete : MonoBehaviour
                         animator.SetBool("cutting", true);
                     }
 
-                    StartCoroutine(
-                        DelayMethod(0.5f, () =>
+                    await DelayMethod(100, () =>
                         {
                             // いったん玉子・人参のアニメーションをテスト
                             if (myPuyo.ingredient == Ingredients.EGG || myPuyo.ingredient == Ingredients.CARROT)
@@ -79,14 +85,15 @@ public class Delete : MonoBehaviour
                                 animator.SetBool("cutting", false);
                             }
                             Destroy(this.puyos[deleteIndex]);
-                        })
-                    );
+                            destroyCount++;
+                        });
 
                 }
                 GManager.instance.CollectIngredients(myPuyo.ingredient);
             }
             i++;
         }
+        return destroyCount;
     }
 
     public void Check(int i)
@@ -179,9 +186,12 @@ public class Delete : MonoBehaviour
         }
 
     }
-    private IEnumerator DelayMethod(float waitTime, Action action)
+
+    async Task<string> DelayMethod(int waitTime, Action action)
     {
-        yield return new WaitForSeconds(waitTime);
+        await Task.Delay(waitTime);
         action();
+        return "finish";
     }
+
 }

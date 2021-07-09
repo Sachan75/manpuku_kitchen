@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class Set : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class Set : MonoBehaviour
     float[] puyox = new float[100];
     float[] puyoy = new float[100];
 
+
     private void Start()
     {
         getFoodsPosition();
@@ -30,6 +32,7 @@ public class Set : MonoBehaviour
 
     void Update()
     {
+        Debug.Log("ぷよセット側➜Update呼び出し");
         MinoMovememt();
 
     }
@@ -58,7 +61,7 @@ public class Set : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             transform.position += new Vector3(-1, 0, 0);
-            
+
             //エリア外に出てしまう場合は、元の位置に戻す
             if (!ValidMovement())
             {
@@ -70,7 +73,7 @@ public class Set : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             transform.position += new Vector3(1, 0, 0);
-            
+
             //エリア外に出てしまう場合は元の位置に戻す
             if (!ValidMovement())
             {
@@ -86,7 +89,7 @@ public class Set : MonoBehaviour
                 fallCompFlg = 1;
                 this.enabled = false;
 
-                FindObjectOfType<Spawn>().NewMino();
+                // FindObjectOfType<Spawn>().NewMino();
 
             }
             else
@@ -96,7 +99,7 @@ public class Set : MonoBehaviour
 
             previousTime = Time.time;
 
-            
+
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
@@ -111,7 +114,7 @@ public class Set : MonoBehaviour
                 transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), -90);
                 rotationFlg = 1;
             }
-            if(rotationCond == 4)
+            if (rotationCond == 4)
             {
                 rotationCond = 0;
             }
@@ -124,24 +127,23 @@ public class Set : MonoBehaviour
     public bool ValidMovement()
     {
         //親オブジェクトの座標
-        double roundX = Mathf.RoundToInt(gameObject.transform.position.x*10.0f) /10.0f;
-        double roundY = Mathf.RoundToInt(gameObject.transform.position.y*10.0f)/ 10.0f;
+        double roundX = Mathf.RoundToInt(gameObject.transform.position.x * 10.0f) / 10.0f;
+        double roundY = Mathf.RoundToInt(gameObject.transform.position.y * 10.0f) / 10.0f;
 
 
         foreach (Transform children in transform)
         {
             //子オブジェクトの座標
-            double childX = Mathf.RoundToInt(children.transform.position.x*10.0f)/10.0f;
-            double childY = Mathf.RoundToInt(children.transform.position.y*10.0f)/10.0f;
+            double childX = Mathf.RoundToInt(children.transform.position.x * 10.0f) / 10.0f;
+            double childY = Mathf.RoundToInt(children.transform.position.y * 10.0f) / 10.0f;
 
             // minoがステージよりはみ出さないように制御
             if (roundY <= 1.5)
             {
-                gameObject.transform.DetachChildren();    //親子関係の解除
-                Destroy(gameObject);     //ぷよセットオブジェクト（親）を削除
+                DivideIngredient();
                 return false;
             }
-            else if(childX <= 4.0)
+            else if (childX <= 4.0)
             {
                 return false;
             }
@@ -153,33 +155,30 @@ public class Set : MonoBehaviour
         foreach (GameObject puyo in this.puyos)
         {
 
-            if (rotationCond == 0) 
+            if (rotationCond == 0)
             {
                 //落下終了条件
                 if (roundX == this.puyox[i] && roundY == this.puyoy[i] + 1.0f)
                 {
-                    gameObject.transform.DetachChildren();    //親子関係の解除
-                    Destroy(gameObject);     //ぷよセットオブジェクト（親）を削除
+                    DivideIngredient();
                     return false;
                 }
             }
             else if (rotationCond == 1)
             {
                 //落下終了条件
-                if (roundX == this.puyox[i] && roundY == this.puyoy[i] + 1.0f || roundX == this.puyox[i] +1.0f&& roundY == this.puyoy[i] + 1.0f)
+                if (roundX == this.puyox[i] && roundY == this.puyoy[i] + 1.0f || roundX == this.puyox[i] + 1.0f && roundY == this.puyoy[i] + 1.0f)
                 {
-                    gameObject.transform.DetachChildren();    //親子関係の解除
-                    Destroy(gameObject);     //ぷよセットオブジェクト（親）を削除
+                    DivideIngredient();
                     return false;
                 }
             }
             else if (rotationCond == 2)
             {
                 //落下終了条件
-                if (roundX == this.puyox[i] && roundY == this.puyoy[i] + 2.0f )
+                if (roundX == this.puyox[i] && roundY == this.puyoy[i] + 2.0f)
                 {
-                    gameObject.transform.DetachChildren();    //親子関係の解除
-                    Destroy(gameObject);     //ぷよセットオブジェクト（親）を削除
+                    DivideIngredient();
                     return false;
                 }
             }
@@ -188,8 +187,7 @@ public class Set : MonoBehaviour
                 //落下終了条件
                 if (roundX == this.puyox[i] && roundY == this.puyoy[i] + 1.0f || roundX == this.puyox[i] - 1.0f && roundY == this.puyoy[i] + 1.0f)
                 {
-                    gameObject.transform.DetachChildren();    //親子関係の解除
-                    Destroy(gameObject);     //ぷよセットオブジェクト（親）を削除
+                    DivideIngredient();
                     return false;
                 }
             }
@@ -198,6 +196,83 @@ public class Set : MonoBehaviour
         return true;
     }
 
-    
+    async private void DivideIngredient()
+    {
+
+        //親子関係の解除
+        gameObject.transform.DetachChildren();
+
+        //ぷよセットオブジェクト（自分自身）を削除
+        Destroy(gameObject);
+
+        for (; ; )
+        {
+            var str = await CheckFall();
+            Debug.Log(str);
+
+            if (str == "finish")
+            {
+
+                FindObjectOfType<Delete>().init();
+                int destroyCount = await FindObjectOfType<Delete>().puyoDestroy();
+
+                Debug.Log("削除件数➜" + destroyCount);
+                if (destroyCount == 0)
+                {
+                    FindObjectOfType<Spawn>().NewMino();
+                }
+                else
+                {
+                    // 再処理
+                    Restart();
+                    continue;
+                }
+                break;
+            }
+        }
+    }
+
+    void Restart()
+    {
+        var puyos = GameObject.FindGameObjectsWithTag("puyo");
+        foreach (GameObject puyoGo in puyos)
+        {
+            if (puyoGo == null)
+            {
+                continue;
+            }
+            var puyo = puyoGo.GetComponent<Puyo>();
+            if (puyo == null)
+            {
+                continue;
+            }
+            puyo.Restart();
+        }
+    }
+
+    async Task<string> CheckFall()
+    {
+        var puyos = GameObject.FindGameObjectsWithTag("puyo");
+        var isFinishFall = true;
+        await Task.Delay(500);
+        foreach (GameObject puyoGo in puyos)
+        {
+            if (puyoGo == null)
+            {
+                continue;
+            }
+            var puyo = puyoGo.GetComponent<Puyo>();
+            if (puyo == null)
+            {
+                continue;
+            }
+            isFinishFall = isFinishFall && puyo.fallCompFlg > 0;
+        }
+        if (isFinishFall)
+        {
+            return "finish";
+        }
+        return "await";
+    }
 
 }

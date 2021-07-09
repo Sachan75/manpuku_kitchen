@@ -33,7 +33,13 @@ public class Puyo : MonoBehaviour
 
     void Update()
     {
-        
+
+        if (fallCompFlg > 0)
+        {
+            Debug.Log(ingredient + ": ペア分解後➜着地完了");
+            return;
+        }
+
 
         MinoMovememt();
 
@@ -71,6 +77,12 @@ public class Puyo : MonoBehaviour
 
     }
 
+    public void Restart()
+    {
+        Debug.Log(ingredient + ": ペア分解後➜リスタート");
+        fallCompFlg = 0;
+    }
+
     private void MinoMovememt()
     {
         //着地前の単体食材の動き
@@ -93,21 +105,28 @@ public class Puyo : MonoBehaviour
         //着地後の動き
         else if (transform.root.gameObject == gameObject)
         {
-           
+
             if (Time.time - previousTime >= fallTime)
             {
                 Observer();
 
+                Debug.Log(ingredient + ": ペア分解後");
+
                 //下に食材があるorエリアの下端まで来た時
                 if (!ValidMovement())
                 {
-                    FindObjectOfType<Delete>().init();
-                    FindObjectOfType<Delete>().puyoDestroy();
+
+                    Debug.Log(ingredient + ": ペア分解後➜着地");
+                    fallCompFlg++;
+
+                    // FindObjectOfType<Delete>().init();
+                    // FindObjectOfType<Delete>().puyoDestroy();
                     //this.enabled = false;
                 }
                 //まだ下に移動できるとき
-                else if(ValidMovement())
+                else if (ValidMovement())
                 {
+                    Debug.Log(ingredient + ": ペア分解後➜落下中");
                     transform.position += new Vector3(0, -1, 0);
                 }
 
@@ -156,7 +175,8 @@ public class Puyo : MonoBehaviour
         return true;
     }
 
-    private void Observer() {
+    private void Observer()
+    {
 
         int i = 0;
         this.puyos = GameObject.FindGameObjectsWithTag("puyo");
