@@ -23,6 +23,8 @@ public class Set : MonoBehaviour
     float[] puyox = new float[100];
     float[] puyoy = new float[100];
 
+    int n = 0;
+
     private void Start()
     {
         getFoodsPosition();
@@ -30,6 +32,7 @@ public class Set : MonoBehaviour
 
     void Update()
     {
+        n++;
         MinoMovememt();
     }
 
@@ -37,6 +40,7 @@ public class Set : MonoBehaviour
     private void getFoodsPosition()
     {
         this.puyos = GameObject.FindGameObjectsWithTag("puyo");
+        Array.Sort(this.puyos, (a, b) => (int)a.transform.position.y - (int)b.transform.position.y);
 
         int i = 0;
         foreach (GameObject puyo in this.puyos)
@@ -44,6 +48,7 @@ public class Set : MonoBehaviour
             //丸め誤差解消
             this.puyox[i] = Mathf.RoundToInt(puyo.transform.position.x * 10.0f) / 10.0f;
             this.puyoy[i] = Mathf.RoundToInt(puyo.transform.position.y * 10.0f) / 10.0f;
+            Debug.Log("【" + GetInstanceID() + ":" + n + "回目】ソート後のゲームオブジェクトの高さ➜" + this.puyoy[i]);
             i++;
         }
     }
@@ -200,15 +205,17 @@ public class Set : MonoBehaviour
 
         for (; ; )
         {
+            // 座標の再取得
+            getFoodsPosition();
+
             var finishOrAwait = await CheckFall();
-            Debug.Log(finishOrAwait);
 
             if (finishOrAwait == "finish")
             {
                 // 連鎖後など下のぷよが落下前の場合は次ループにすすめる
                 if (!CheckFalled())
                 {
-                    Debug.Log("落ちきってないので再ループ");
+                    Debug.Log("【" + GetInstanceID() + ":" + n + "回目】落ちきってないので再ループ");
                     Restart();
                     continue;
                 }
@@ -216,9 +223,10 @@ public class Set : MonoBehaviour
                 FindObjectOfType<Delete>().init();
                 int destroyCount = await FindObjectOfType<Delete>().puyoDestroy();
 
-                Debug.Log("Set:削除件数➜" + destroyCount);
+                Debug.Log("【" + GetInstanceID() + ":" + n + "回目】Set:削除件数➜" + destroyCount);
                 if (destroyCount == 0)
                 {
+                    // 次のぷよセットを生成
                     FindObjectOfType<Spawn>().NewMino();
                 }
                 else
@@ -246,7 +254,7 @@ public class Set : MonoBehaviour
                 if (i == 0)
                 {
                     // 一番下が最下行ではない場合
-                    Debug.Log("一番下まで落ちてない！");
+                    Debug.Log("【" + GetInstanceID() + ":" + n + "回目】一番下まで落ちてない！ y:" + y);
                     if (y > 1.5)
                     {
                         isFalled = false;
@@ -255,7 +263,7 @@ public class Set : MonoBehaviour
                 else if (y - last > 1.0)
                 {
                     // ぷよとぷよの間に隙間ができている場合
-                    Debug.Log("すきまができている！");
+                    Debug.Log("【" + GetInstanceID() + ":" + n + "回目】すきまができている！ 前回y:" + last + ", y:" + y);
                     isFalled = false;
                 }
                 i++;
@@ -268,8 +276,8 @@ public class Set : MonoBehaviour
 
     void Restart()
     {
-        var puyos = GameObject.FindGameObjectsWithTag("puyo");
-        foreach (GameObject puyoGo in puyos)
+        // var puyos = GameObject.FindGameObjectsWithTag("puyo");
+        foreach (GameObject puyoGo in this.puyos)
         {
             if (puyoGo == null)
             {
@@ -286,10 +294,10 @@ public class Set : MonoBehaviour
 
     async Task<string> CheckFall()
     {
-        var puyos = GameObject.FindGameObjectsWithTag("puyo");
         var isFinishFall = true;
         await Task.Delay(100);
-        foreach (GameObject puyoGo in puyos)
+
+        foreach (GameObject puyoGo in this.puyos)
         {
             if (puyoGo == null)
             {
