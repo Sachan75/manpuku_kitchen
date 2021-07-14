@@ -18,12 +18,12 @@ public class Set : MonoBehaviour
     public int rotationFlg = 0; //1の時ぷよ（単体）の回転をしないようにする
     public int rotationCond = 0;//0:初期状態,1:1回転,2:2回転,3:3回転
 
-    public GameObject[] puyos;
+    GameObject[] puyos;
 
     float[] puyox = new float[100];
     float[] puyoy = new float[100];
 
-    int n = 0;
+    public bool isDivideIngredient = false;
 
     private void Start()
     {
@@ -32,15 +32,18 @@ public class Set : MonoBehaviour
 
     void Update()
     {
-        n++;
         MinoMovememt();
+
+        if (isDivideIngredient)
+        {
+            return;
+        }
     }
 
     //フィールド上の食材（単体）の場所を取得
     private void getFoodsPosition()
     {
         this.puyos = GameObject.FindGameObjectsWithTag("puyo");
-        Array.Sort(this.puyos, (a, b) => (int)a.transform.position.y - (int)b.transform.position.y);
 
         int i = 0;
         foreach (GameObject puyo in this.puyos)
@@ -48,7 +51,6 @@ public class Set : MonoBehaviour
             //丸め誤差解消
             this.puyox[i] = Mathf.RoundToInt(puyo.transform.position.x * 10.0f) / 10.0f;
             this.puyoy[i] = Mathf.RoundToInt(puyo.transform.position.y * 10.0f) / 10.0f;
-            Debug.Log("【" + GetInstanceID() + ":" + n + "回目】ソート後のゲームオブジェクトの高さ➜" + this.puyoy[i]);
             i++;
         }
     }
@@ -194,161 +196,18 @@ public class Set : MonoBehaviour
         return true;
     }
 
-    async private void DivideIngredient()
+    /// <summary>
+    /// 素材のペア解除.
+    /// </summary>
+    private void DivideIngredient()
     {
 
         //親子関係の解除
-        gameObject.transform.DetachChildren();
-
-        //ぷよセットオブジェクト（自分自身）を削除
-        Destroy(gameObject);
-
-        for (; ; )
+        if (!isDivideIngredient)
         {
-            // 座標の再取得
-            getFoodsPosition();
-
-            var finishOrAwait = await CheckFall();
-
-            if (finishOrAwait == "finish")
-            {
-                // 連鎖後など下のぷよが落下前の場合は次ループにすすめる
-                if (!CheckFalled())
-                {
-                    Debug.Log("【" + GetInstanceID() + ":" + n + "回目】落ちきってないので再ループ");
-                    Restart();
-                    continue;
-                }
-
-                FindObjectOfType<Delete>().init();
-                int destroyCount = await FindObjectOfType<Delete>().puyoDestroy();
-
-                Debug.Log("【" + GetInstanceID() + ":" + n + "回目】Set:削除件数➜" + destroyCount);
-                if (destroyCount == 0)
-                {
-                    // 次のぷよセットを生成
-                    FindObjectOfType<Spawn>().NewMino();
-                }
-                else
-                {
-                    // 再処理
-                    Restart();
-                    continue;
-                }
-                break;
-            }
+            gameObject.transform.DetachChildren();
+            isDivideIngredient = true;
         }
-    }
-
-    bool CheckFalled()
-    {
-        // どこかの列で最下行まできていない列がある場合は落下途中
-        bool isFalled = true;
-
-        foreach (var dict in YsPerX())
-        {
-            int i = 0;
-            float last = 0.5f;
-            foreach (var y in dict.Value)
-            {
-                if (i == 0)
-                {
-                    // 一番下が最下行ではない場合
-                    Debug.Log("【" + GetInstanceID() + ":" + n + "回目】一番下まで落ちてない！ y:" + y);
-                    if (y > 1.5)
-                    {
-                        isFalled = false;
-                    }
-                }
-                else if (y - last > 1.0)
-                {
-                    // ぷよとぷよの間に隙間ができている場合
-                    Debug.Log("【" + GetInstanceID() + ":" + n + "回目】すきまができている！ 前回y:" + last + ", y:" + y);
-                    isFalled = false;
-                }
-                i++;
-                last = y;
-            }
-        }
-        // 全部落下済み
-        return isFalled;
-    }
-
-    void Restart()
-    {
-        // var puyos = GameObject.FindGameObjectsWithTag("puyo");
-        foreach (GameObject puyoGo in this.puyos)
-        {
-            if (puyoGo == null)
-            {
-                continue;
-            }
-            var puyo = puyoGo.GetComponent<Puyo>();
-            if (puyo == null)
-            {
-                continue;
-            }
-            puyo.Restart();
-        }
-    }
-
-    async Task<string> CheckFall()
-    {
-        var isFinishFall = true;
-        await Task.Delay(100);
-
-        foreach (GameObject puyoGo in this.puyos)
-        {
-            if (puyoGo == null)
-            {
-                continue;
-            }
-            var puyo = puyoGo.GetComponent<Puyo>();
-            if (puyo == null)
-            {
-                continue;
-            }
-            isFinishFall = isFinishFall && puyo.fallCompFlg > 0;
-        }
-        if (isFinishFall)
-        {
-            return "finish";
-        }
-        return "await";
-    }
-
-    Dictionary<float, List<float>> YsPerX()
-    {
-        // 座標の再取得
-        getFoodsPosition();
-
-        var ysPerX = new Dictionary<float, List<float>>();
-        int i = 0;
-        foreach (float x in this.puyox)
-        {
-            // 枠外のデータは除外
-            if (x < 5.0 || 10.0 < x)
-            {
-                continue;
-            }
-
-            if (ysPerX.ContainsKey(x))
-            {
-                ysPerX[x].Add(this.puyoy[i]);
-            }
-            else
-            {
-                ysPerX[x] = new List<float>();
-                ysPerX[x].Add(this.puyoy[i]);
-            }
-            i++;
-        }
-
-        foreach (var dict in ysPerX)
-        {
-            dict.Value.Sort();
-        }
-        return ysPerX;
     }
 
 }

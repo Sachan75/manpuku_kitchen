@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4176137706767371774}
   - component: {fileID: 4718122020517529237}
+  - component: {fileID: 4542530416054765751}
   m_Layer: 0
   m_Name: onion&potato
   m_TagString: Untagged
@@ -52,6 +53,19 @@ MonoBehaviour:
   rotationFlg: 0
   rotationCond: 0
   puyos: []
+  isDivideIngredient: 0
+--- !u!114 &4542530416054765751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6754141036545049901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cf44480f6727274eb1317dfcc67fbaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4354629035836562720
 PrefabInstance:
   m_ObjectHideFlags: 0
