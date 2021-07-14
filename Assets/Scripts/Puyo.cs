@@ -18,8 +18,6 @@ public class Puyo : MonoBehaviour
     [Header("素材の種類")]
     public Ingredients ingredient;
 
-    // minoの落ちる時間
-    public float fallTime = 5.0f;
     //落下完了フラグ
     public int fallCompFlg = 0;
 
@@ -65,22 +63,19 @@ public class Puyo : MonoBehaviour
         else if (transform.root.gameObject == gameObject)
         {
 
-            if (Time.time - previousTime >= fallTime)
-            {
-                Observer();
+            Observer();
 
-                //下に食材があるorエリアの下端まで来た時
-                if (!ValidMovement())
-                {
-                    fallCompFlg++;
-                }
-                //まだ下に移動できるとき
-                else if (ValidMovement())
-                {
-                    transform.position += new Vector3(0, -1, 0);
-                }
-                previousTime = Time.time;
+            //下に食材があるorエリアの下端まで来た時
+            if (!ValidMovement())
+            {
+                fallCompFlg++;
             }
+            //まだ下に移動できるとき
+            else if (ValidMovement())
+            {
+                transform.position += new Vector3(0, -1, 0);
+            }
+            previousTime = Time.time;
         }
     }
 
@@ -97,14 +92,6 @@ public class Puyo : MonoBehaviour
             return false;
         }
         int i = 0;
-        foreach (GameObject puyo in this.puyos)
-        {
-            //丸め誤差解消
-            this.puyox[i] = Mathf.RoundToInt(puyo.transform.position.x * 10.0f) / 10.0f;
-            this.puyoy[i] = Mathf.RoundToInt(puyo.transform.position.y * 10.0f) / 10.0f;
-            i++;
-        }
-        i = 0;
         foreach (float x in this.puyox)
         {
             //落下終了条件
@@ -121,6 +108,10 @@ public class Puyo : MonoBehaviour
     {
         int i = 0;
         this.puyos = GameObject.FindGameObjectsWithTag("puyo");
+
+        this.puyox = new float[100];
+        this.puyoy = new float[100];
+
         foreach (GameObject puyo in this.puyos)
         {
             //丸め誤差解消（フィールト中の全ぷよの位置）
