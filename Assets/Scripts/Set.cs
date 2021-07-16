@@ -32,7 +32,7 @@ public class Set : MonoBehaviour
 
     void Update()
     {
-        MinoMovememt();
+        Movememt();
 
         if (isDivideIngredient)
         {
@@ -40,7 +40,9 @@ public class Set : MonoBehaviour
         }
     }
 
-    //フィールド上の食材（単体）の場所を取得
+    /// <summary>
+    /// フィールド上の食材（単体）の場所を取得
+    /// </summary>
     private void getFoodsPosition()
     {
         this.puyos = GameObject.FindGameObjectsWithTag("puyo");
@@ -55,69 +57,110 @@ public class Set : MonoBehaviour
         }
     }
 
-    private void MinoMovememt()
+    /// <summary>
+    /// 素材ペアの移動.
+    /// </summary>
+    private void Movememt()
     {
         // 左矢印キーで左に動く
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            transform.position += new Vector3(-1, 0, 0);
-
-            //エリア外に出てしまう場合は、元の位置に戻す
-            if (!ValidMovement())
-            {
-                transform.position -= new Vector3(-1, 0, 0);
-            }
+            LeftMove();
         }
         // 右矢印キーで右に動く
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            transform.position += new Vector3(1, 0, 0);
-
-            //エリア外に出てしまう場合は元の位置に戻す
-            if (!ValidMovement())
-            {
-                transform.position -= new Vector3(1, 0, 0);
-            }
+            RightMove();
         }
-        // 自動で下に移動させつつ、下矢印キーでも移動する
-        else if (Input.GetKeyDown(KeyCode.DownArrow) || Time.time - previousTime >= fallTime)
+        // 自動で下に移動させつつ、下矢印キーでも移動する（押しっぱなしも）
+        else if (Input.GetKeyDown(KeyCode.DownArrow) ||
+            Time.time - previousTime >= fallTime ||
+            (Input.GetKey(KeyCode.DownArrow) && Time.time - previousTime >= 0.05f))
         {
-            //エリア外にでるorほかのぷよの上に着地した場合はSTOP
-            if (!ValidMovement())
-            {
-                fallCompFlg = 1;
-                this.enabled = false;
-            }else if (!movePuyo())
-            {
-                transform.position += new Vector3(-5, 1, 0);
-            }
-            else
-            {
-                transform.position += new Vector3(0, -1, 0);
-            }
-            previousTime = Time.time;
+            DownMove();
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            // ブロックの回転
-            rotationFlg = 0;
-            transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), 90);
-            rotationCond += 1;
-            if (!ValidMovement())
-            {
-                rotationCond -= 1;
-                transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), -90);
-                rotationFlg = 1;
-            }
-            if (rotationCond == 4)
-            {
-                rotationCond = 0;
-            }
+            UpMove();
         }
     }
 
-    // ぷよの移動範囲の制御
-    public bool ValidMovement()
+    /// <summary>
+    /// 左キー押下時のイベント.
+    /// </summary>
+    void LeftMove()
+    {
+        transform.position += new Vector3(-1, 0, 0);
+
+        //エリア外に出てしまう場合は、元の位置に戻す
+        if (!ValidMovement())
+        {
+            transform.position -= new Vector3(-1, 0, 0);
+        }
+    }
+
+    /// <summary>
+    /// 右キー押下時のイベント.
+    /// </summary>
+    void RightMove()
+    {
+        transform.position += new Vector3(1, 0, 0);
+
+        //エリア外に出てしまう場合は元の位置に戻す
+        if (!ValidMovement())
+        {
+            transform.position -= new Vector3(1, 0, 0);
+        }
+    }
+
+    /// <summary>
+    /// 下キー押下時のイベント.
+    /// </summary>
+    void DownMove()
+    {
+        //エリア外にでるorほかのぷよの上に着地した場合はSTOP
+        if (!ValidMovement())
+        {
+            fallCompFlg = 1;
+            this.enabled = false;
+        }
+        else if (!movePuyo())
+        {
+            transform.position += new Vector3(-5, 1, 0);
+        }
+        else
+        {
+            transform.position += new Vector3(0, -1, 0);
+        }
+        previousTime = Time.time;
+    }
+
+    /// <summary>
+    /// 上キー押下時のイベント.
+    /// </summary>
+    void UpMove()
+    {
+        // ブロックの回転
+        rotationFlg = 0;
+        transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), 90);
+        rotationCond += 1;
+        if (!ValidMovement())
+        {
+            rotationCond -= 1;
+            transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), -90);
+            rotationFlg = 1;
+        }
+        if (rotationCond == 4)
+        {
+            rotationCond = 0;
+        }
+    }
+
+    /// <summary>
+    /// ぷよの移動範囲の制御
+    /// </summary>
+    /// <returns></returns>
+    bool ValidMovement()
     {
         //親オブジェクトの座標
         double roundX = Mathf.RoundToInt(gameObject.transform.position.x * 10.0f) / 10.0f;
@@ -214,14 +257,16 @@ public class Set : MonoBehaviour
     }
 
     //予告ぷよの移動（予告ぷよをパズルエリアへ移動）
-    private bool movePuyo() {
+    private bool movePuyo()
+    {
 
         //親オブジェクトの座標
         double roundX = Mathf.RoundToInt(gameObject.transform.position.x * 10.0f) / 10.0f;
         double roundY = Mathf.RoundToInt(gameObject.transform.position.y * 10.0f) / 10.0f;
 
 
-        if (roundY==13.5f && roundX == 12.0f ) {
+        if (roundY == 13.5f && roundX == 12.0f)
+        {
             return false;
         }
 
@@ -229,6 +274,6 @@ public class Set : MonoBehaviour
 
     }
 
-   
+
 
 }

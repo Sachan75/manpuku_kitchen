@@ -63,7 +63,6 @@ public class PairControl : MonoBehaviour
             FindObjectOfType<Delete>().init();
             int destroyCount = await FindObjectOfType<Delete>().puyoDestroy();
 
-            Debug.Log("【" + GetInstanceID() + "】Set:削除件数➜" + destroyCount);
             if (destroyCount == 0)
             {
                 //ぷよセットオブジェクト（自分自身）を削除
@@ -157,14 +156,12 @@ public class PairControl : MonoBehaviour
                     if (y > 1.5)
                     {
                         // 一番下が最下行ではない場合
-                        Debug.Log("【" + GetInstanceID() + "】一番下まで落ちてない！ y:" + y);
                         isFalled = false;
                     }
                 }
                 else if (y - last > 1.0)
                 {
                     // ぷよとぷよの間に隙間ができている場合
-                    Debug.Log("【" + GetInstanceID() + "】すきまができている！ 前回y:" + last + ", y:" + y);
                     isFalled = false;
                 }
                 i++;
