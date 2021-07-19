@@ -74,21 +74,18 @@ public class Delete : MonoBehaviour
                     // いったん玉子のみアニメーションをテスト
                     if (myPuyo.ingredient == Ingredients.EGG || myPuyo.ingredient == Ingredients.CARROT)
                     {
-                        // animator.SetBool("cutting", true);
+                        animator.SetBool("cutting", true);
                     }
+                }
 
-                    await DelayMethod(100, () =>
+                await DelayMethod(300, () =>
+                    {
+                        foreach (int deleteIndex in countList)
                         {
-                            // いったん玉子・人参のアニメーションをテスト
-                            if (myPuyo.ingredient == Ingredients.EGG || myPuyo.ingredient == Ingredients.CARROT)
-                            {
-                                // animator.SetBool("cutting", false);
-                            }
                             Destroy(this.puyos[deleteIndex]);
                             destroyCount++;
-                        });
-
-                }
+                        }
+                    });
                 GManager.instance.CollectIngredients(myPuyo.ingredient);
             }
             i++;
