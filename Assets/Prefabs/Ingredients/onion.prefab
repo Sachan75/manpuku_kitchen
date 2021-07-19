@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1527825624365781403}
   - component: {fileID: 8619677295868804761}
   - component: {fileID: 3246619925402791768}
+  - component: {fileID: 2978750957803784895}
   m_Layer: 0
   m_Name: onion
   m_TagString: puyo
@@ -95,9 +96,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c68c01b85d6b484e9ca13b7f62fb14a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  num: 0
   previousTime: 0
   rotationPoint: {x: 0, y: 0, z: 0}
   ingredient: 3
-  fallTime: 1
   fallCompFlg: 0
+--- !u!95 &2978750957803784895
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7132145499412177338}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5ef026d3b0bd3d44094039158522e4a5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

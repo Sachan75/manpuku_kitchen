@@ -71,11 +71,7 @@ public class Delete : MonoBehaviour
                 foreach (int deleteIndex in countList)
                 {
                     animator = this.puyos[deleteIndex].GetComponent<Animator>();
-                    // いったん玉子のみアニメーションをテスト
-                    if (myPuyo.ingredient == Ingredients.EGG || myPuyo.ingredient == Ingredients.CARROT)
-                    {
-                        animator.SetBool("cutting", true);
-                    }
+                    animator.SetBool("cutting", true);
                 }
 
                 await DelayMethod(300, () =>

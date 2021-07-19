@@ -52,7 +52,6 @@ MonoBehaviour:
   rotationPoint: {x: 0, y: 0, z: 0}
   rotationFlg: 0
   rotationCond: 0
-  puyos: []
   isDivideIngredient: 0
 --- !u!114 &5640377396757996878
 MonoBehaviour:
