@@ -18,13 +18,11 @@ public class Delete : MonoBehaviour
     private Animator animator;
     private Dictionary<Ingredients, List<int>> ingredientsCount;
 
-    // Start is called before the first frame update
     void Start()
     {
 
     }
 
-    // Update is called once per frame
     void Update()
     {
 
@@ -46,7 +44,7 @@ public class Delete : MonoBehaviour
         }
     }
 
-    async public Task<int> puyoDestroy()
+    async public Task<int> puyoDestroy(int chainCount)
     {
 
         int destroyCount = 0;
@@ -84,6 +82,11 @@ public class Delete : MonoBehaviour
                     });
                 GManager.instance.CollectIngredients(myPuyo.ingredient);
             }
+
+            // 得点計算
+            var score = Scorer.CountScore(this.ingredientsCount, chainCount);
+            GManager.instance.AddScore(score);
+
             i++;
         }
         return destroyCount;
@@ -186,5 +189,6 @@ public class Delete : MonoBehaviour
         action();
         return "finish";
     }
+
 
 }

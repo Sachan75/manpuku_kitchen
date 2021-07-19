@@ -12,6 +12,8 @@ public class PairControl : MonoBehaviour
 
     bool isChecking = false;
 
+    int chainCount = 0;
+
     void Start()
     {
 
@@ -60,8 +62,9 @@ public class PairControl : MonoBehaviour
                 return;
             }
 
+            chainCount++;
             FindObjectOfType<Delete>().init();
-            int destroyCount = await FindObjectOfType<Delete>().puyoDestroy();
+            int destroyCount = await FindObjectOfType<Delete>().puyoDestroy(chainCount);
 
             if (destroyCount == 0)
             {
