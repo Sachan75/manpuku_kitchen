@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using System.Threading.Tasks;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using manpuku_kitchen.Utils;
 
 public class Delete : MonoBehaviour
@@ -44,7 +45,7 @@ public class Delete : MonoBehaviour
         }
     }
 
-    async public Task<int> puyoDestroy(int chainCount)
+    async public UniTask<int> puyoDestroy(int chainCount)
     {
 
         int destroyCount = 0;
@@ -72,14 +73,9 @@ public class Delete : MonoBehaviour
                     animator.SetBool("cutting", true);
                 }
 
-                await DelayMethod(300, () =>
-                    {
-                        foreach (int deleteIndex in countList)
-                        {
-                            Destroy(this.puyos[deleteIndex]);
-                            destroyCount++;
-                        }
-                    });
+                var ct = this.GetCancellationTokenOnDestroy();
+                destroyCount += await DelayAsync(ct, countList);
+
                 GManager.instance.CollectIngredients(myPuyo.ingredient);
             }
 
@@ -88,6 +84,19 @@ public class Delete : MonoBehaviour
             GManager.instance.AddScore(score);
 
             i++;
+        }
+        return destroyCount;
+    }
+
+    private async UniTask<int> DelayAsync(CancellationToken token, List<int> countList)
+    {
+        await UniTask.Delay(TimeSpan.FromMilliseconds(300), cancellationToken: token);
+
+        int destroyCount = 0;
+        foreach (int deleteIndex in countList)
+        {
+            Destroy(this.puyos[deleteIndex]);
+            destroyCount++;
         }
         return destroyCount;
     }
@@ -182,13 +191,5 @@ public class Delete : MonoBehaviour
         }
 
     }
-
-    async Task<string> DelayMethod(int waitTime, Action action)
-    {
-        await Task.Delay(waitTime);
-        action();
-        return "finish";
-    }
-
 
 }
