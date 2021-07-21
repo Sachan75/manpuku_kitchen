@@ -72,6 +72,7 @@ public class PairControl : MonoBehaviour
                 Destroy(gameObject);
 
                 // 次のぷよセットを生成
+                FindObjectOfType<Set>().movePuyo();
                 FindObjectOfType<Spawn>().NewMino();
 
                 isChecking = false;

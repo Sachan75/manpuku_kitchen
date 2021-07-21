@@ -28,6 +28,7 @@ public class Set : MonoBehaviour
     private void Start()
     {
         getFoodsPosition();
+        
     }
 
     void Update()
@@ -123,10 +124,6 @@ public class Set : MonoBehaviour
         {
             fallCompFlg = 1;
             this.enabled = false;
-        }
-        else if (!movePuyo())
-        {
-            transform.position += new Vector3(-5, 1, 0);
         }
         else
         {
@@ -257,20 +254,10 @@ public class Set : MonoBehaviour
     }
 
     //予告ぷよの移動（予告ぷよをパズルエリアへ移動）
-    private bool movePuyo()
+    public void movePuyo()
     {
 
-        //親オブジェクトの座標
-        double roundX = Mathf.RoundToInt(gameObject.transform.position.x * 10.0f) / 10.0f;
-        double roundY = Mathf.RoundToInt(gameObject.transform.position.y * 10.0f) / 10.0f;
-
-
-        if (roundY == 13.5f && roundX == 12.0f)
-        {
-            return false;
-        }
-
-        return true;
+        transform.position += new Vector3(-5, 1, 0);
 
     }
 

@@ -9,6 +9,8 @@ public class Spawn : MonoBehaviour
     void Start()
     {
         NewMino();
+        FindObjectOfType<Set>().movePuyo();
+        NewMino();
     }
 
     public void NewMino()
