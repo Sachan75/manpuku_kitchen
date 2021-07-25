@@ -8,13 +8,29 @@ public class Spawn : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        NewMino();
-        FindObjectOfType<Set>().movePuyo();
+        SetNextIngredient();
         NewMino();
     }
 
     public void NewMino()
     {
+        StartFalling();
+        SetNextIngredient();
+    }
+
+    private void SetNextIngredient()
+    {
         Instantiate(Minos[Random.Range(0, Minos.Length)], transform.position, Quaternion.identity);
+    }
+
+    private void StartFalling()
+    {
+        foreach (Set obj in UnityEngine.Object.FindObjectsOfType(typeof(Set)))
+        {
+            if (obj.isNext)
+            {
+                obj.movePuyo();
+            }
+        }
     }
 }

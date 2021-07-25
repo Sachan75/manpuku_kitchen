@@ -21,6 +21,9 @@ public class Puyo : MonoBehaviour
     //落下完了フラグ
     public int fallCompFlg = 0;
 
+    // Nextエリアにいるかどうか
+    public bool isNext = true;
+
     private void Start()
     {
 
@@ -30,6 +33,11 @@ public class Puyo : MonoBehaviour
     {
         // 着地完了しているため読み飛ばし
         if (fallCompFlg > 0)
+        {
+            return;
+        }
+
+        if (isNext)
         {
             return;
         }

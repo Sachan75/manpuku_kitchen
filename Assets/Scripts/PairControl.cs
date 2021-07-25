@@ -72,7 +72,6 @@ public class PairControl : MonoBehaviour
                 Destroy(gameObject);
 
                 // 次のぷよセットを生成
-                FindObjectOfType<Set>().movePuyo();
                 FindObjectOfType<Spawn>().NewMino();
 
                 isChecking = false;
@@ -102,11 +101,16 @@ public class PairControl : MonoBehaviour
         this.puyoy = new float[100];
 
         int i = 0;
-        foreach (GameObject puyo in this.puyos)
+        foreach (GameObject puyoGo in this.puyos)
         {
+            var puyo = puyoGo.GetComponent<Puyo>();
+            if (puyo.isNext)
+            {
+                continue;
+            }
             //丸め誤差解消
-            this.puyox[i] = Mathf.RoundToInt(puyo.transform.position.x * 10.0f) / 10.0f;
-            this.puyoy[i] = Mathf.RoundToInt(puyo.transform.position.y * 10.0f) / 10.0f;
+            this.puyox[i] = Mathf.RoundToInt(puyoGo.transform.position.x * 10.0f) / 10.0f;
+            this.puyoy[i] = Mathf.RoundToInt(puyoGo.transform.position.y * 10.0f) / 10.0f;
             i++;
         }
     }
@@ -128,6 +132,10 @@ public class PairControl : MonoBehaviour
             }
             var puyo = puyoGo.GetComponent<Puyo>();
             if (puyo == null)
+            {
+                continue;
+            }
+            if (puyo.isNext)
             {
                 continue;
             }
@@ -223,7 +231,7 @@ public class PairControl : MonoBehaviour
                 continue;
             }
             var puyo = puyoGo.GetComponent<Puyo>();
-            if (puyo == null)
+            if (puyo == null || puyo.isNext)
             {
                 continue;
             }

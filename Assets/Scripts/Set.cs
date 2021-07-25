@@ -25,6 +25,9 @@ public class Set : MonoBehaviour
 
     public bool isDivideIngredient = false;
 
+    // Nextエリアにいるかどうか
+    public bool isNext = true;
+
     private void Start()
     {
         getFoodsPosition();
@@ -33,6 +36,11 @@ public class Set : MonoBehaviour
 
     void Update()
     {
+        if (isNext)
+        {
+            return;
+        }
+        
         Movememt();
 
         if (isDivideIngredient)
@@ -203,6 +211,7 @@ public class Set : MonoBehaviour
                 //落下終了条件
                 if (roundX == this.puyox[i] && roundY == this.puyoy[i] + 1.0f)
                 {
+                    Debug.Log("i:" + i + ", x:" + roundX + ", y:" + roundX);
                     DivideIngredient();
                     return false;
                 }
@@ -256,9 +265,27 @@ public class Set : MonoBehaviour
     //予告ぷよの移動（予告ぷよをパズルエリアへ移動）
     public void movePuyo()
     {
+        if (!isNext)
+        {
+            return;
+        }
 
+        isNext = false;
+        
         transform.position += new Vector3(-5, 1, 0);
 
+        GameObject child1 = transform.GetChild(0).gameObject;
+        if (child1 != null)
+        {
+            var puyo1 = child1.GetComponent<Puyo>();
+            puyo1.isNext = false;
+        }
+        GameObject child2 = transform.GetChild(1).gameObject;
+        if (child2 != null)
+        {
+            var puyo2 = child2.GetComponent<Puyo>();
+            puyo2.isNext = false;
+        }
     }
 
 
