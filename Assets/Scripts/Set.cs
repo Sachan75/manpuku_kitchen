@@ -40,7 +40,7 @@ public class Set : MonoBehaviour
         {
             return;
         }
-
+        getFoodsPosition();
         Movememt();
 
         if (isDivideIngredient)
@@ -216,7 +216,6 @@ public class Set : MonoBehaviour
                 //落下終了条件
                 if (roundX == this.puyox[i] && roundY == this.puyoy[i] + 1.0f)
                 {
-                    Debug.Log("i:" + i + ", x:" + roundX + ", y:" + roundX);
                     DivideIngredient();
                     return false;
                 }
