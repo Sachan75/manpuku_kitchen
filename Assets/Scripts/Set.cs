@@ -31,7 +31,7 @@ public class Set : MonoBehaviour
     private void Start()
     {
         getFoodsPosition();
-        
+
     }
 
     void Update()
@@ -40,7 +40,7 @@ public class Set : MonoBehaviour
         {
             return;
         }
-        
+
         Movememt();
 
         if (isDivideIngredient)
@@ -59,6 +59,11 @@ public class Set : MonoBehaviour
         int i = 0;
         foreach (GameObject puyo in this.puyos)
         {
+            // 分裂前（落下中のぷよは対象から外す）
+            if (puyo.transform.root.gameObject != puyo)
+            {
+                continue;
+            }
             //丸め誤差解消
             this.puyox[i] = Mathf.RoundToInt(puyo.transform.position.x * 10.0f) / 10.0f;
             this.puyoy[i] = Mathf.RoundToInt(puyo.transform.position.y * 10.0f) / 10.0f;
@@ -271,7 +276,7 @@ public class Set : MonoBehaviour
         }
 
         isNext = false;
-        
+
         transform.position += new Vector3(-5, 1, 0);
 
         GameObject child1 = transform.GetChild(0).gameObject;
