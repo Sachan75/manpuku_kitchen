@@ -76,26 +76,31 @@ public class Set : MonoBehaviour
     /// </summary>
     private void Movememt()
     {
+        // 上矢印キーで回転（他のキーと競合しないように押された場合は処理終了）
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            UpMove();
+            return;
+        }
+
         // 左矢印キーで左に動く
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             LeftMove();
         }
+
         // 右矢印キーで右に動く
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             RightMove();
         }
+
         // 自動で下に移動させつつ、下矢印キーでも移動する（押しっぱなしも）
-        else if (Input.GetKeyDown(KeyCode.DownArrow) ||
+        if (Input.GetKeyDown(KeyCode.DownArrow) ||
             Time.time - previousTime >= fallTime ||
             (Input.GetKey(KeyCode.DownArrow) && Time.time - previousTime >= 0.05f))
         {
             DownMove();
-        }
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            UpMove();
         }
     }
 

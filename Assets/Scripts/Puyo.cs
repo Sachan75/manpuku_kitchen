@@ -61,7 +61,8 @@ public class Puyo : MonoBehaviour
                 // ぷよの回転
                 transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), -90);
 
-                if (FindObjectOfType<Set>().rotationFlg == 1)
+                var parentSet = transform.root.gameObject.GetComponent<Set>();
+                if (parentSet.rotationFlg == 1)
                 {
                     transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), +90);
                 }
