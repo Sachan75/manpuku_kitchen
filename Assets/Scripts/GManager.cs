@@ -6,6 +6,7 @@ using manpuku_kitchen.Utils;
 public class GManager : MonoBehaviour
 {
     public static GManager instance = null;
+    public int gameOverFlg = 0;
 
     // スコア
     private int score = 0;
@@ -105,4 +106,5 @@ public class GManager : MonoBehaviour
         hasCarrot = hasEgg = hasMeet = hasOnion = hasPotato = false;
     }
 
+    
 }

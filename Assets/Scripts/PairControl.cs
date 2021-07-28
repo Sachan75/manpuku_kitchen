@@ -14,6 +14,8 @@ public class PairControl : MonoBehaviour
 
     int chainCount = 0;
 
+    int gameOverFlg = 0;
+
     void Start()
     {
 
@@ -236,6 +238,26 @@ public class PairControl : MonoBehaviour
                 continue;
             }
             puyo.Restart();
+        }
+    }
+
+    //ゲームオーバー処理
+    //ぷよ出現時にぷよ出現位置にぷよがあった場合はゲームオーバーフラグをたてる
+    void setGameoverFlg()
+    {
+
+        //ひとつ前のぷよの座標を取得
+        //そのぷよの座標がぷよ出現位置の座標と同じ場合はゲームオーバーフラグを立てる
+        int i = 0;
+        foreach (float puyox in this.puyox)
+        {
+            if (puyox==7.0f && puyoy[i]==14.5f)
+            {
+                //ゲームオーバーフラグを立てる
+                gameOverFlg = 1;
+                break;
+            }
+            i++;
         }
     }
 }
