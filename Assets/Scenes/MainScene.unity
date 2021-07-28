@@ -200,7 +200,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 46844530}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -254.99998, y: -15, z: -2699.9998}
+  m_LocalPosition: {x: -254.99998, y: -15, z: 0}
   m_LocalScale: {x: 179.99998, y: 449.99997, z: 0}
   m_Children: []
   m_Father: {fileID: 2043457601}
@@ -552,7 +552,7 @@ RectTransform:
   m_GameObject: {fileID: 514615010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_Children: []
   m_Father: {fileID: 2043457601}
   m_RootOrder: 2
@@ -953,7 +953,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1079401159}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 160, y: 100, z: -2699.9998}
+  m_LocalPosition: {x: 160, y: 100, z: 0}
   m_LocalScale: {x: 60, y: 60, z: 0}
   m_Children:
   - {fileID: 1381896662}
@@ -1116,7 +1116,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1117731136}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -120, y: 179.99998, z: -2699.9998}
+  m_LocalPosition: {x: -120, y: 179.99998, z: 0}
   m_LocalScale: {x: 30, y: 60, z: 0}
   m_Children: []
   m_Father: {fileID: 2043457601}
@@ -1272,7 +1272,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1680,7 +1680,7 @@ MonoBehaviour:
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 960, y: 540}
-  m_ScreenMatchMode: 1
+  m_ScreenMatchMode: 2
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
