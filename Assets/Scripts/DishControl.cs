@@ -77,6 +77,9 @@ public class DishControl : MonoBehaviour
         {
             // TODO 料理ができたアニメーションとか？
 
+            // 食べた料理数を +1
+            GManager.instance.AddPlateCount();
+
             // 次のお題を表示
             ResetDishTheme();
         }

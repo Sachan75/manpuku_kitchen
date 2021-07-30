@@ -14,6 +14,8 @@ public class GManager : MonoBehaviour
     // 素材を揃えたかどうか
     private bool hasCarrot, hasEgg, hasMeet, hasOnion, hasPotato;
 
+    private int plateCount = 0;
+
     private void Awake()
     {
         if (instance == null)
@@ -106,5 +108,21 @@ public class GManager : MonoBehaviour
         hasCarrot = hasEgg = hasMeet = hasOnion = hasPotato = false;
     }
 
-    
+    /// <summary>
+    /// 食べた皿数を返す.
+    /// </summary>
+    /// <returns></returns>
+    public int GetPlateCount()
+    {
+        return this.plateCount;
+    }
+
+    /// <summary>
+    /// 食べた皿数を +1 する.
+    /// </summary>
+    public void AddPlateCount()
+    {
+        this.plateCount++;
+        Debug.Log(this.plateCount);
+    }
 }
