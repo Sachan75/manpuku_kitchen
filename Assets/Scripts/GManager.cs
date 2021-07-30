@@ -31,6 +31,18 @@ public class GManager : MonoBehaviour
         }
     }
 
+    public void Reset()
+    {
+        gameOverFlg = 0;
+        score = 0;
+        hasCarrot = false;
+        hasEgg = false;
+        hasMeet = false;
+        hasOnion = false;
+        hasPotato = false;
+        plateCount = 0;
+    }
+
     /// <summary>
     /// ゲームオーバーフラグを返す.
     /// </summary>
