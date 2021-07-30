@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PairControl : MonoBehaviour
 {
@@ -35,6 +36,13 @@ public class PairControl : MonoBehaviour
         {
             return;
         }
+
+        if (gameOverFlg == 1)
+        {
+            return;
+        }
+
+        setGameoverFlg();
 
         // 各素材の位置情報を取得
         getIngredientsPosition();
@@ -251,11 +259,12 @@ public class PairControl : MonoBehaviour
         int i = 0;
         foreach (float puyox in this.puyox)
         {
-            if (puyox==7.0f && puyoy[i]==14.5f)
+            if (puyox == 7.0f && puyoy[i] == 14.5f)
             {
                 //ゲームオーバーフラグを立てる
                 gameOverFlg = 1;
-                break;
+                GManager.instance.SetGameOverFlg();
+                SceneManager.LoadScene("GameOver");
             }
             i++;
         }

@@ -6,7 +6,9 @@ using manpuku_kitchen.Utils;
 public class GManager : MonoBehaviour
 {
     public static GManager instance = null;
-    public int gameOverFlg = 0;
+
+    // ゲームオーバーフラグ
+    private int gameOverFlg = 0;
 
     // スコア
     private int score = 0;
@@ -27,6 +29,31 @@ public class GManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+    }
+
+    /// <summary>
+    /// ゲームオーバーフラグを返す.
+    /// </summary>
+    /// <returns></returns>
+    public int GetGameOverFlg()
+    {
+        return this.gameOverFlg;
+    }
+
+    /// <summary>
+    /// ゲームオーバーフラグをたてる.
+    /// </summary>
+    public void SetGameOverFlg()
+    {
+        this.gameOverFlg = 1;
+    }
+
+    /// <summary>
+    /// ゲームオーバーフラグをリセットする.
+    /// </summary>
+    public void ResetGameOverFlg()
+    {
+        this.gameOverFlg = 0;
     }
 
     /// <summary>
@@ -123,6 +150,5 @@ public class GManager : MonoBehaviour
     public void AddPlateCount()
     {
         this.plateCount++;
-        Debug.Log(this.plateCount);
     }
 }
