@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5480085619902273134}
   - component: {fileID: 5887132969529242151}
   m_Layer: 0
-  m_Name: meet
+  m_Name: meat
   m_TagString: puyo
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
