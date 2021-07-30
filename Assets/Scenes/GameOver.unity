@@ -906,6 +906,7 @@ GameObject:
   - component: {fileID: 1524176413}
   - component: {fileID: 1524176415}
   - component: {fileID: 1524176414}
+  - component: {fileID: 1524176416}
   m_Layer: 5
   m_Name: CREARED DISH NUM
   m_TagString: Untagged
@@ -1029,6 +1030,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1524176412}
   m_CullTransparentMesh: 1
+--- !u!114 &1524176416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1524176412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ea4c2914fffef846a0ff87892d2f5fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1555247497
 GameObject:
   m_ObjectHideFlags: 0
@@ -1040,6 +1053,7 @@ GameObject:
   - component: {fileID: 1555247498}
   - component: {fileID: 1555247500}
   - component: {fileID: 1555247499}
+  - component: {fileID: 1555247501}
   m_Layer: 5
   m_Name: SCORE  NUM
   m_TagString: Untagged
@@ -1163,6 +1177,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1555247497}
   m_CullTransparentMesh: 1
+--- !u!114 &1555247501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1555247497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ca6b8263845a294298c51865fc271f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1911508720
 GameObject:
   m_ObjectHideFlags: 0
